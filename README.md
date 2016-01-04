@@ -7,7 +7,7 @@ Deze visualizatie is bedoeld om misdaadcijfers te vergelijken met bijvoorbeeld h
 
 ### Sketches
 SVG Map United States
-![](svg_map.png "Logo Title Text 1")
+![](doc/svg_map.png "Logo Title Text 1")
 
 Visualization by state
-![](VisByState.png "Visualization by state)
+![](doc/VisByState.png "Visualization by state")
