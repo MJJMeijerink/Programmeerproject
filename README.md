@@ -14,6 +14,7 @@ Visualization by state
 
 ### Data
 Gebruikte datasets:
+
 https://www.fbi.gov/about-us/cjis/ucr/crime-in-the-u.s/2010/crime-in-the-u.s.-2010/tables/10tbl20.xls
 https://github.com/jldbc/gunsandcrime/blob/master/gun_crime_data.csv
 
