@@ -11,3 +11,14 @@ SVG Map United States
 
 Visualization by state
 ![](doc/VisByState.png "Visualization by state")
+
+### Data
+Gebruikte datasets:
+https://www.fbi.gov/about-us/cjis/ucr/crime-in-the-u.s/2010/crime-in-the-u.s.-2010/tables/10tbl20.xls
+https://github.com/jldbc/gunsandcrime/blob/master/gun_crime_data.csv
+
+Mogelijk komen er nog meer bij, bijvoorbeeld unemployment rates per state etc.
+
+Om de data bruikbaar te maken zal ik python gebruiken om de data om te zetten naar json formaat, wat makkelijk gebruikt kan worden door de D3 library voor javascript.
+
+###
