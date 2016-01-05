@@ -2,4 +2,5 @@
 Proposal gemaakt en ingeleverd
 
 # Day 2
-Extra data gezocht, begonnen aan design document
+* Extra data gezocht
+* Begonnen aan design document
