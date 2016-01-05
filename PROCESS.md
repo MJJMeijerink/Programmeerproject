@@ -1,5 +1,5 @@
 # Day 1
-* Proposal gemaakt en ingeleverd
+* Proposal geschreven en ingeleverd
 
 # Day 2
 * Extra data gezocht
