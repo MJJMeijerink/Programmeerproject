@@ -16,5 +16,11 @@
 * `drawChart(data) // Tekent de tweede visualisatie met als parameter de data`
 * `drawComparison(data, states) // Tekent visualisatie voor het vergelijken van twee staten`
 * `getData(var, state) // Haalt de data op die hoort bij de geselecteerde variabele en eventuele staat`
+* 
+
+## API's/Frameworks
+* CSS/HTML
+* Javascript --> D3 (+ topojson)
+* XMLHttpRequest
 
 
