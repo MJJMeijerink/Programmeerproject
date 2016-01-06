@@ -21,7 +21,7 @@
 * `onMouseOver(this) // Laat een popup zien bij een mouseover event`
 
 ## Sketches
-![](doc/advancedSketch "Advanced sketch")
+![](doc/advancedSketch.png "Advanced sketch")
 
 ## API's/Frameworks
 * CSS/HTML
