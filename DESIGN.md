@@ -12,8 +12,7 @@
 * Het combineren van twee variabelen (bijvoorbeeld hoeveelheid wapens gecombineerd met het aantal doden door wapens).
 
 ## Methods
-* drawMap(data) // Tekent de kaart met als parameter de data
-* drawChart(data) // Tekent de tweede visualisatie met als parameter de data
-* darwComparison(data, states) // Tekent visualisatie voor het vergelijken van twee staten
-* getData(var, state) // Haalt de data op die hoort bij de geselecteerde variabele en eventuele staat
-* 
+`drawMap(data) // Tekent de kaart met als parameter de data
+drawChart(data) // Tekent de tweede visualisatie met als parameter de data
+darwComparison(data, states) // Tekent visualisatie voor het vergelijken van twee staten
+getData(var, state) // Haalt de data op die hoort bij de geselecteerde variabele en eventuele staat`
