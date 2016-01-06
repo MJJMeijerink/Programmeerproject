@@ -15,8 +15,13 @@
 * `drawMap(data) // Tekent de kaart met als parameter de data`
 * `drawChart(data) // Tekent de tweede visualisatie met als parameter de data`
 * `drawComparison(data, states) // Tekent visualisatie voor het vergelijken van twee staten`
+* `chooseStates() // Choose which states to compare`
 * `getData(var, state) // Haalt de data op die hoort bij de geselecteerde variabele en eventuele staat`
-* 
+* `goTo(state(s)) // Brengt de gebruiker naar de tweede visualisatie `
+* `onMouseOver(this) // Laat een popup zien bij een mouseover event`
+
+## Sketches
+![](doc/advancedSketch "Advanced sketch")
 
 ## API's/Frameworks
 * CSS/HTML
