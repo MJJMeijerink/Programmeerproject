@@ -24,6 +24,10 @@ Variabelen: Year, Population, Violent crime total, Murder and nonnegligent Mansl
 Data over wapengebruik bij moorden verzameld door de FBI.
 Variabelen: Totalmurders, Total firearms, Handguns, Rifles, Shotguns, Firearms (type unknown), Knives or cutting instruments, Other weapons, Hands;fists;feet;etc
 
+* http://www.bls.gov/home.htm
+Extra variabele werkloosheid is van deze website afgehaald
+Variabele: Werkloosheid als percentage van de werkende bevolking
+
 Om de data bruikbaar te maken zal ik python gebruiken om de data om te zetten naar json formaat, wat makkelijk gebruikt kan worden door de D3 library voor javascript.
 
 ### Applicatie
