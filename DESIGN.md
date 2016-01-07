@@ -29,10 +29,10 @@
 * XMLHttpRequest
 
 ## Data
-* http://www.gunpolicy.org/
+* http://www.gunpolicy.org/.
 Data over het gemiddelde wapenbezit per huishouden voor de afgelopen drie decennia
 
-* http://www.ucrdatatool.gov/
+* http://www.ucrdatatool.gov/.
 API voor het verzamelen van data van de FBI over misdaad per staat van 1960 tot 2012
 Variabelen: Year, Population, Violent crime total, Murder and nonnegligent Manslaughter, Forcible rape, Robbery, Aggravated assault, Property crime total, Burglary, Larceny-theft, Motor vehicle theft, Violent Crime rate, Murder and nonnegligent manslaughter rate, Forcible rape rate, Robbery rate, Aggravated assault rate, Property crime rate, Burglary rate, Larceny-theft rate, Motor vehicle theft rate.
 
