@@ -39,3 +39,7 @@ Variabelen: Year, Population, Violent crime total, Murder and nonnegligent Mansl
 * https://www.fbi.gov/about-us/cjis/ucr/crime-in-the-u.s.
 Data over wapengebruik bij moorden verzameld door de FBI.
 Variabelen: Totalmurders, Total firearms, Handguns, Rifles, Shotguns, Firearms (type unknown), Knives or cutting instruments, Other weapons, Hands;fists;feet;etc
+
+* http://www.bls.gov/home.htm
+Extra variabele werkloosheid is van deze website afgehaald
+Variabele: Werkloosheid als percentage van de werkende bevolking
