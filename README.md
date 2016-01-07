@@ -13,13 +13,12 @@ Visualization by state
 ![](doc/VisByState.png "Visualization by state")
 
 ### Data
-Gebruikte datasets:
+* http://www.gunpolicy.org/
+Data over het gemiddelde wapenbezit per huishouden voor de afgelopen drie decennia
 
-https://www.fbi.gov/about-us/cjis/ucr/crime-in-the-u.s/2010/crime-in-the-u.s.-2010/tables/10tbl20.xls
-https://github.com/jldbc/gunsandcrime/blob/master/gun_crime_data.csv
-
-Mogelijk komen er nog meer bij, bijvoorbeeld unemployment rates per state etc.
-En ik ben nog op zoek naar datasets die data hebben per jaar en per staat.
+* http://www.ucrdatatool.gov/
+API voor het verzamelen van data van de FBI over misdaad per staat van 1960 tot 2012
+Variabelen: Year, Population, Violent crime total, Murder and nonnegligent Manslaughter, Forcible rape, Robbery, Aggravated assault, Property crime total, Burglary, Larceny-theft, Motor vehicle theft, Violent Crime rate, Murder and nonnegligent manslaughter rate, Forcible rape rate, Robbery rate, Aggravated assault rate, Property crime rate, Burglary rate, Larceny-theft rate, Motor vehicle theft rate.
 
 Om de data bruikbaar te maken zal ik python gebruiken om de data om te zetten naar json formaat, wat makkelijk gebruikt kan worden door de D3 library voor javascript.
 
@@ -27,10 +26,10 @@ Om de data bruikbaar te maken zal ik python gebruiken om de data om te zetten na
 We willen de staten van Amerika met elkaar kunnen vergelijken, maar we willen ook individueel naar de staten kunnen kijken. Daarom is er de aparte visualisatie (tweede sketch) en de kaart van Amerika. Op de kaart van Amerika kunnen we alle staten makkelijke vergelijken en met de aparte visualisatie kunnen we dieper in gaan op iedere individuele staat.
 
 ### Tools
-De visualisatie zal gemaakt worden met html en css voor de visualisatie, daarnaast gebruiken we javascript voor de interactiviteit. Ook gebruiken we de d3.js library om door middel van javascript de HTML DOM elementen te creëeren en veranderen.
+De visualisatie zal gemaakt worden met html en css voor de visualisatie, daarnaast gebruiken we javascript voor de interactiviteit. Ook gebruiken we de d3.js library om door middel van javascript de HTML DOM elementen te creÃ«eren en veranderen.
 
-### Potentiële problemen
-Mogelijke obstakels bij het maken van deze visualisaties zijn het vinden van data voor alle jaren én alle staten. Daarnaast zijn er redelijk veel verschillende variabelen, sommige variabelen zullen hun eigen soort visualisatie nodig hebben (lijngrafiek, staafgrafiek etc).
+### PotentiÃ«le problemen
+Mogelijke obstakels bij het maken van deze visualisaties zijn het vinden van data voor alle jaren Ã©n alle staten. Daarnaast zijn er redelijk veel verschillende variabelen, sommige variabelen zullen hun eigen soort visualisatie nodig hebben (lijngrafiek, staafgrafiek etc).
 
 ### Vergelijkbare visualisaties
 Deze visualisatie maakt gebruik van een kaart op ongeveer dezelfde manier als ik dat van plan ben, ik ben alleen geen fan van het kleurschema en het is voor mijn visualisatie belangrijk dat er op de staten geklikt kan worden. De visualisatie maakt gebruik van een svg als kaart.
