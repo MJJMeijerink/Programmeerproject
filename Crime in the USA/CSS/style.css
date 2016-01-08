@@ -1,7 +1,10 @@
 /* CSS Document style.css */
 
 html, body, #container { height: 100%; width:100%;}
-body > #container { height: auto; min-height: 100%; min-width:100%;}
+
+#container {
+	position:absolute;
+	}
 
 html,body {
 	margin: 0;
@@ -11,19 +14,12 @@ html,body {
 	font-size:17px;
 	}
 
-#homebut {
-	top:0;
-	margin-top:20px;
-	margin-left:20px;
-	position: fixed;
-	z-index: 2;
-	}
-
 #compare {
     margin-top: 80px;
     position: absolute;
     margin-left: 300px;
-	}	
+	}
+	
 #wrapper{
 	margin-top:60px;
 	margin-left: auto;
@@ -31,18 +27,35 @@ html,body {
 	width:1050px;
 	position:relative;
 	}
+	
 #buttons {
 	float:left;
 	margin-top:70px;
 	width:300px;
 	line-height:24px;
 	}
+	
+#buttons2{
+	float:left;
+	margin-top:50px;
+	width:300px;
+	line-height:24px;
+	margin-bottom: 70px;
+	display: none;
+	}
+#graph{
+	display:none;
+	margin-top: 50px;
+	}
+	
 input[type='radio'] {
     transform: scale(1.5);
 	}
+	
 #slider {
 	width:200px;
 	}
+	
 #svg2 {
 	float:left;
 	}
@@ -76,27 +89,6 @@ input[type='radio'] {
   font-weight:initial;
 }
 
-#map-canvas {
-    height: 196px;
-	width: 500px;
-    margin: 0px;
-    padding: 0px
-}
-	  
-#back{
-	top: 50%;
-	margin-left:50px;
-	position: absolute;
-	text-decoration: none;
-	color:black;
-}
-#back:hover {font-weight: bold;}
-
-#links{
-	text-align:center;
-	margin-top:50px;
-}
-
 #balk{
 	top:0;
 	background: black;
@@ -110,16 +102,7 @@ input[type='radio'] {
 	position: fixed;
 	z-index: 1;
 	}
-	
 
-#all{
-	color: black;
-	font-size: 17.5px;
-	margin-left: 40px;
-	margin-right: 40px;
-	margin-top: 75px;
-	margin-bottom: 5px;
-}
 
 #footer{
 	bottom:0;
