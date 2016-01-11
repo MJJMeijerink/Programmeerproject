@@ -18,3 +18,8 @@
 # Day 5
 * HTML + CSS afgemaakt, prototype is gemaakt
 * Basis gelegd voor javascript code, navigatie tussen de twee visualisaties is nu mogelijk
+
+# Day 6
+* Layout veranderd na aanleiding van advies tijdens de presentaties vrijdag, beide visualisatie zullen nu op het scherm te zien zijn
+* Data wordt nu geladen door middel van XMLHttpRequest
+* Eerste werkende javascript code geschreven
