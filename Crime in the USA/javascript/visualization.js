@@ -15,20 +15,25 @@ function ready() { // Load SVG before doing ANYTHING
 		state.on('click', function(){goTo();});
 	}
 
+	var data;
+	var loadData = new XMLHttpRequest();
+	loadData.onload = dataLoaded;
+	loadData.open("get", "data/data.json", true);
+	loadData.send();
+	
+	function dataLoaded(){
+		var data = JSON.parse(this.responseText);
+		console.log(data);
+	}
+	
 }
 
 function goTo() {
-	document.getElementById('buttons2').style.display = 'initial';
+	document.getElementById('SVG').style.width = "35%";
 	document.getElementById('graph').style.display = 'initial';
-	var $target = $('html,body'); 
-	$target.animate({scrollTop: $target.height()}, 400);
 }
 
 function back() {
-	var $target = $('html,body'); 
-	$target.animate({scrollTop: 0}, 400);
-	setTimeout( function(){
-		document.getElementById('buttons2').style.display = 'none';
-		document.getElementById('graph').style.display = 'none';
-	},400);
+	document.getElementById('graph').style.display = 'none';
+	document.getElementById('SVG').style.width = "60%";
 }

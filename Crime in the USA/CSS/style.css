@@ -15,51 +15,57 @@ html,body {
 	}
 
 #compare {
-    margin-top: 80px;
-    position: absolute;
-    margin-left: 300px;
+	position:absolute;
+	margin-top: 100px;
 	}
-	
-#wrapper{
-	margin-top:60px;
-	margin-left: auto;
-	margin-right: auto;
-	width:1050px;
-	position:relative;
+#back {
+	position:absolute;
+	margin-top: 100px;
 	}
 	
 #buttons {
+	margin-top: 150px;
+	font-size:12px;
+	width: 15%;
 	float:left;
-	margin-top:70px;
-	width:300px;
-	line-height:24px;
 	}
 	
-#buttons2{
-	float:left;
+ul {
+    list-style-type: none;
+	}
+	
+#SVG {
 	margin-top:50px;
-	width:300px;
-	line-height:24px;
-	margin-bottom: 70px;
-	display: none;
-	}
-#graph{
-	display:none;
-	margin-top: 50px;
-	}
-	
-input[type='radio'] {
-    transform: scale(1.5);
-	}
-	
-#slider {
-	width:200px;
-	}
-	
-#svg2 {
 	float:left;
+	width: 60%;
+	}
+	
+#graph {
+	display:none;
+	width: 50%;
+	float:left;
+	}
+	
+#wrapper{
+	margin-top:6px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top:auto;
+	margin-bottom:auto;
+	width:96%;
+	position:relative;
 	}
 
+#slider {
+	width:100%;
+	margin-bottom:40px;
+	}
+#slide {
+	display:block;
+	width:100%;
+	float:left;
+	}
+	
 #btn{
 	margin-left:1%;
 	background: #3498db;
