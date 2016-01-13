@@ -23,3 +23,8 @@
 * Layout veranderd na aanleiding van advies tijdens de presentaties vrijdag, beide visualisatie zullen nu op het scherm te zien zijn
 * Data wordt nu geladen door middel van XMLHttpRequest
 * Eerste werkende javascript code geschreven
+
+# Day 7
+* Kleuren voor de datamap gekozen
+* Alle variabelen kunnen nu worden gevisualiseerd op de kaart
+* Enkele outliers uit de data gehaald zodat de data beter gevisualiseerd wordt
