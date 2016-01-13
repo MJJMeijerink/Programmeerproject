@@ -2,7 +2,7 @@ function ready() { // Load SVG before doing ANYTHING
 
 	d3.selectAll('path')
 		.on('mouseover', function(){
-			d3.select(this).style('cursor', 'hand').style('stroke-width', 0.6);
+			d3.select(this).style('cursor', 'hand').style('cursor', 'pointer').style('stroke-width', 0.6);
 			this.parentNode.appendChild(this);
 			var labels = document.getElementById('labels')
 			labels.parentNode.appendChild(labels);
@@ -14,31 +14,111 @@ function ready() { // Load SVG before doing ANYTHING
 		var state = d3.select('#' + Object.keys(states)[i]);
 		state.on('click', function(){goTo();});
 	}
+	
+	var variables = ['Violent Crime rate', 'Forcible rape rate', 'Robbery rate', 'Aggravated assault rate', 'Murder rate',
+					'Property crime rate', 'Burglary rate', 'Larceny-theft rate', 'Motor vehicle theft rate', 'Unemployment', 'Guns per household']
+	for (v in variables) {
+		document.getElementById(variables[v]).checked = false;
+	}
+	document.getElementById('slider').min = 0;
+	document.getElementById('slider').max = 0;
+	
+	r1 = document.getElementById('Violent Crime rate');
+	r2 = document.getElementById('Forcible rape rate');
+	r3 = document.getElementById('Robbery rate');
+	r4 = document.getElementById('Aggravated assault rate');
+	r5 = document.getElementById('Property crime rate');
+	r6 = document.getElementById('Burglary rate');
+	r7 = document.getElementById('Larceny-theft rate');
+	r8 = document.getElementById('Motor vehicle theft rate');
+	r9 = document.getElementById('Unemployment');
+	r10 = document.getElementById('Guns per household');
+	r11 = document.getElementById('Murder rate');
 
 	var data;
 	var loadData = new XMLHttpRequest();
 	loadData.onload = dataLoaded;
-	loadData.open("get", "http://mjjmeijerink.github.io/data.json", true);
+	loadData.open("get", "data/data.json", true);
 	loadData.send();
 	
 	function dataLoaded(){
 		var data = JSON.parse(this.responseText);
-		console.log(getData('Guns per household', 'Alabama', data));
 		
 		slider = document.getElementById('slider')
 		
-		r1 = document.getElementById('Violent Crime rate');
 		r1.onclick = function() {
 			slider.min = 1960
 			slider.max = 2012
-			drawMap('Violent Crime rate', data, slider);
+			drawMap(r1.id, data, slider);
+		}	
+		r2.onclick = function() {
+			slider.min = 1960
+			slider.max = 2012
+			drawMap(r2.id, data, slider);
+		}		
+		r3.onclick = function() {
+			slider.min = 1960
+			slider.max = 2012
+			drawMap(r3.id, data, slider);
 		}
-		slider.onchange = function () {
-			if (document.getElementById('Violent Crime rate').checked) {
-				v = document.getElementById('Violent Crime rate').id;
-				console.log(v)
+		r4.onclick = function() {
+			slider.min = 1960
+			slider.max = 2012
+			drawMap(r4.id, data, slider);
+		}	
+		r5.onclick = function() {
+			slider.min = 1960
+			slider.max = 2012
+			drawMap(r5.id, data, slider);
+		}	
+		r6.onclick = function() {
+			slider.min = 1960
+			slider.max = 2012
+			drawMap(r6.id, data, slider);
+		}
+		r7.onclick = function() {
+			slider.min = 1960
+			slider.max = 2012
+			drawMap(r7.id, data, slider);
+		}
+		r8.onclick = function() {
+			slider.min = 1960
+			slider.max = 2012
+			drawMap(r8.id, data, slider);
+		}
+		r9.onclick = function() {
+			slider.min = 1976
+			slider.max = 2015
+			drawMap(r9.id, data, slider);
+		}
+		r10.onclick = function() {
+			slider.min = 0
+			slider.max = 2
+			drawMap(r10.id, data, slider);
+		}
+		r11.onclick = function() {
+			slider.min = 1960
+			slider.max = 2012
+			drawMap(r11.id, data, slider);
+		}
+		slider.oninput = function () {
+			for (x in variables) {
+				if (document.getElementById(variables[x]).checked) {
+					v = document.getElementById(variables[x])
+				}
 			}
-			drawMap(v, data, slider)
+			if (slider.max > 0) {
+				drawMap(v.id, data, slider);
+			}
+			if (slider.value > 1950) {
+				document.getElementById('sliderText').innerHTML = 'Year: ' + slider.value;
+			}else if (slider.value == 2) {
+				document.getElementById('sliderText').innerHTML = 'Year: 2001 - 2010';
+			}else if (slider.value == 1) {
+				document.getElementById('sliderText').innerHTML = 'Year: 1991 - 2000';
+			}else if (slider.value == 0 && slider.max > 0) {
+				document.getElementById('sliderText').innerHTML = 'Year: 1981 - 1990';
+			}
 		}
 	}
 	
@@ -51,36 +131,47 @@ function goTo() {
 
 function back() {
 	document.getElementById('graph').style.display = 'none';
-	document.getElementById('SVG').style.width = "60%";
+	document.getElementById('SVG').style.width = "65%";
 }
 
-function getData(v, c, d) {
-	var l = []
-	for (var x in d[0][c][v])  {
-		l.push(d[0][c][v][x])
+function getData(d, v) {
+	var l = {};
+	for (var x in d[0]) {
+		var vals = Object.keys(d[0][x][v]).map(function (key) {
+			return d[0][x][v][key];
+		});
+		l[d[0][x]['Name']]=vals;
 	}
 	return l
 }
 
 function drawMap(v, data, slider = 0){
-		for (var i = 0; i < Object.keys(states).length; i++) {
-			var state = d3.select('#' + Object.keys(states)[i]);
-			var x = getData(v, states[Object.keys(states)[i]], data);
-			var value = x[slider.value - slider.min]
-			if (value < 100) {
-				state.style('fill', '#000000');
-			}else if (value >= 100 && value < 200) {
-				state.style('fill', '#222222');
-			}else if (value >= 200 && value < 300) {
-				state.style('fill', '#444444');
-			}else if (value >= 300 && value < 400) {
-				state.style('fill', '#666666');
-			}else if (value >= 400 && value < 500) {
-				state.style('fill', '#888888');
-			}else if (value >= 500 && value < 600) {
-				state.style('fill', '#AAAAAA');
-			}else if (value >= 600) {
-				state.style('fill', '#CCCCCC');
-			}
+	if (slider.value > 1950) {
+		document.getElementById('sliderText').innerHTML = 'Year: ' + slider.value;
+	}
+	var d = getData(data, v);
+	var vals = Object.keys(d).map(function (key) {
+		return d[key];
+	});
+	var max = d3.max(vals, function(array) {
+		return d3.max([array[slider.value - slider.min]]);
+	});
+	var min = d3.min(vals, function (array) {
+		return d3.min([array[slider.value - slider.min]]);
+	});
+	console.log(min + ', ' + max)
+	var stateNames = Object.getOwnPropertyNames(d);
+	for (var i = 0; i < stateNames.length; i++) {
+		var state = d3.select('#' + Object.getOwnPropertyNames(d)[i]);
+		if (v != 'Guns per household') {
+			var value = d[stateNames[i]][slider.value - slider.min]
+			console.log(value + ', ' + stateNames[i]);
+		} else {
+			if (slider.value == 0) {var value = d[stateNames[i]][2];}
+			else if (slider.value == 2) {var value = d[stateNames[i]][0];}
+			else {var value = d[stateNames[i]][1];}
+		}
+		var color = d3.scale.linear().domain([min, max]).range(['#f7fcf5', '#00441b']); //http://bl.ocks.org/darrenjaworski/5874214
+		state.style('fill', function() {return color(value);});
 	}
 }
