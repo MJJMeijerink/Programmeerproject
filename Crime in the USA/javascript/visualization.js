@@ -1,39 +1,24 @@
 function ready() { // Load SVG before doing ANYTHING
 
-	d3.selectAll('path')
-		.on('mouseover', function(){
-			d3.select(this).style('cursor', 'hand').style('cursor', 'pointer').style('stroke-width', 0.6);
-			this.parentNode.appendChild(this);
-			var labels = document.getElementById('labels')
-			labels.parentNode.appendChild(labels);
-		}).on('mouseout', function(){
-			d3.select(this).style('stroke-width', 0.28222218);
-		});
+	var variables = ['Violent Crime rate', 'Forcible rape rate', 'Robbery rate', 'Aggravated assault rate', 'Murder rate',
+					'Property crime rate', 'Burglary rate', 'Larceny-theft rate', 'Motor vehicle theft rate', 'Unemployment', 'Guns per household']
 	
 	for (var i = 0; i < Object.keys(states).length; i++) {
 		var state = d3.select('#' + Object.keys(states)[i]);
-		state.on('click', function(){goTo();});
+		state.on('click', function(){goTo(variables);}).attr('class', 'state');
 	}
-	
-	var variables = ['Violent Crime rate', 'Forcible rape rate', 'Robbery rate', 'Aggravated assault rate', 'Murder rate',
-					'Property crime rate', 'Burglary rate', 'Larceny-theft rate', 'Motor vehicle theft rate', 'Unemployment', 'Guns per household']
+		
 	for (v in variables) {
 		document.getElementById(variables[v]).checked = false;
 	}
 	document.getElementById('slider').min = 0;
 	document.getElementById('slider').max = 0;
 	
-	r1 = document.getElementById('Violent Crime rate');
-	r2 = document.getElementById('Forcible rape rate');
-	r3 = document.getElementById('Robbery rate');
-	r4 = document.getElementById('Aggravated assault rate');
-	r5 = document.getElementById('Property crime rate');
-	r6 = document.getElementById('Burglary rate');
-	r7 = document.getElementById('Larceny-theft rate');
-	r8 = document.getElementById('Motor vehicle theft rate');
-	r9 = document.getElementById('Unemployment');
-	r10 = document.getElementById('Guns per household');
-	r11 = document.getElementById('Murder rate');
+	var w = 300, h = 60;
+	var parent = d3.select("#SVG").append("svg").attr("id", "parent").attr("width", '90%').attr("height", h);
+	var legend = parent.append("defs").append("svg:linearGradient").attr("id", "gradient").attr("x1", "100%").attr("y1", "0%").attr("x2", "0%").attr("y2", "0%");
+	legend.append("stop").attr("offset", "0%").attr("stop-color", '#00441b').attr("stop-opacity", 1);
+	legend.append("stop").attr("offset", "100%").attr("stop-color", '#f7fcf5').attr("stop-opacity", 1);
 
 	var data;
 	var loadData = new XMLHttpRequest();
@@ -43,64 +28,23 @@ function ready() { // Load SVG before doing ANYTHING
 	
 	function dataLoaded(){
 		var data = JSON.parse(this.responseText);
-		
+	
 		slider = document.getElementById('slider')
 		
-		r1.onclick = function() {
-			slider.min = 1960
-			slider.max = 2012
-			drawMap(r1.id, data, slider);
-		}	
-		r2.onclick = function() {
-			slider.min = 1960
-			slider.max = 2012
-			drawMap(r2.id, data, slider);
-		}		
-		r3.onclick = function() {
-			slider.min = 1960
-			slider.max = 2012
-			drawMap(r3.id, data, slider);
-		}
-		r4.onclick = function() {
-			slider.min = 1960
-			slider.max = 2012
-			drawMap(r4.id, data, slider);
-		}	
-		r5.onclick = function() {
-			slider.min = 1960
-			slider.max = 2012
-			drawMap(r5.id, data, slider);
-		}	
-		r6.onclick = function() {
-			slider.min = 1960
-			slider.max = 2012
-			drawMap(r6.id, data, slider);
-		}
-		r7.onclick = function() {
-			slider.min = 1960
-			slider.max = 2012
-			drawMap(r7.id, data, slider);
-		}
-		r8.onclick = function() {
-			slider.min = 1960
-			slider.max = 2012
-			drawMap(r8.id, data, slider);
-		}
-		r9.onclick = function() {
-			slider.min = 1976
-			slider.max = 2015
-			drawMap(r9.id, data, slider);
-		}
-		r10.onclick = function() {
-			slider.min = 0
-			slider.max = 2
-			drawMap(r10.id, data, slider);
-		}
-		r11.onclick = function() {
-			slider.min = 1960
-			slider.max = 2012
-			drawMap(r11.id, data, slider);
-		}
+		d3.selectAll('.radButton').on('click', function () {
+			if (~this.id.indexOf('rate')) { //http://stackoverflow.com/a/1789952
+				slider.min = 1960;
+				slider.max = 2012;
+			}else if (this.id == 'Unemployment') {
+				slider.min = 1976;
+				slider.max = 2015;
+			}else {
+				slider.min = 0;
+				slider.max = 2;
+			}
+			drawMap(this.id, data, slider, w, h, legend, parent);
+		});
+
 		slider.oninput = function () {
 			for (x in variables) {
 				if (document.getElementById(variables[x]).checked) {
@@ -108,7 +52,7 @@ function ready() { // Load SVG before doing ANYTHING
 				}
 			}
 			if (slider.max > 0) {
-				drawMap(v.id, data, slider);
+				drawMap(v.id, data, slider, w, h, legend, parent, true);
 			}
 			if (slider.value > 1950) {
 				document.getElementById('sliderText').innerHTML = 'Year: ' + slider.value;
@@ -120,13 +64,91 @@ function ready() { // Load SVG before doing ANYTHING
 				document.getElementById('sliderText').innerHTML = 'Year: 1981 - 1990';
 			}
 		}
+		
+		var tooltip = d3.select('#map').append('g')
+				.attr('id', 'tooltip').style('display', 'none');
+			tooltip.append('rect').attr('id', 'tooltipRect').attr('height', '10px').attr('width', 0)
+				.style('fill', '#FFF')
+				.style('stroke', '#000').style('stroke-width', 0.5);
+			tooltip.append('text').attr('id', 'tooltipText1').attr('font-size', 3);
+			tooltip.append('text').attr('id', 'tooltipText2').attr('font-size', 3);
+		
+		d3.selectAll('.state')
+			.on('mouseover', function(){
+				d3.select(this).style('cursor', 'hand').style('cursor', 'pointer').style('stroke-width', 0.6);
+				this.parentNode.appendChild(this);
+				var labels = document.getElementById('labels')
+				labels.parentNode.appendChild(labels);
+				var tTip = document.getElementById('tooltip');
+				tTip.parentNode.appendChild(tTip);
+				tooltip.style('display', 'initial');
+			}).on('mouseout', function(){
+				d3.select(this).style('stroke-width', 0.28222218);
+				tooltip.style('display', 'none')
+			}).on('mousemove', function() {
+				var el = this;
+				var mouse = d3.mouse(this);
+				for (x in variables) {
+					if (document.getElementById(variables[x]).checked) {
+						var variable = document.getElementById(variables[x])
+					}
+				}
+				if (mouse[0] < 135) {
+					d3.select('#tooltipRect').attr('x', mouse[0] + 2).attr('y', mouse[1] - 12);
+					d3.select('#tooltipText1').text(function(){
+						return states[el.id];
+					}).attr('x', mouse[0] + 4).attr('y', mouse[1]-8);
+					d3.select('#tooltipText2').text(function(){
+						if (variable == undefined) {return '-'}
+						else if (variable.id == 'Guns per household') {
+							if (slider.value == 0) {return data[0][states[el.id]][variable.id]['1981 - 1990'];}
+							else if (slider.value == 1) {return data[0][states[el.id]][variable.id]['1991 - 2000'];}
+							else return data[0][states[el.id]][variable.id]['2001 - 2010'];
+						}
+						else {
+							return data[0][states[el.id]][variable.id][slider.value];
+						}
+					}).attr('x', mouse[0] + 4).attr('y', mouse[1]-4.5);
+					var textWidth = document.getElementById('tooltipText1').getComputedTextLength();
+					d3.select('#tooltipRect').attr('width', textWidth + 5)
+				} else {
+					var text1 = d3.select('#tooltipText1')
+					text1.text(function(){
+						return states[el.id];
+					});
+					var textWidth = document.getElementById('tooltipText1').getComputedTextLength();
+					d3.select('#tooltipRect').attr('x', mouse[0] - textWidth - 6).attr('y', mouse[1] - 12);
+					d3.select('#tooltipText2').text(function(){
+						if (variable == undefined) {return '-'}
+						else if (el.id == 'DC') {
+							return 'NaN'
+						}
+						else if (variable.id == 'Guns per household') {
+							if (slider.value == 0) {return data[0][states[el.id]][variable.id]['2001 - 2010'];}
+							else if (slider.value == 1) {return data[0][states[el.id]][variable.id]['1991 - 2000'];}
+							else return data[0][states[el.id]][variable.id]['1981 - 1990'];
+						}
+						else {
+							return data[0][states[el.id]][variable.id][slider.value];
+						}
+					}).attr('x', mouse[0] - textWidth - 4).attr('y', mouse[1]-4.5);
+					d3.select('#tooltipRect').attr('width', textWidth + 5)
+					text1.attr('x', mouse[0] - textWidth - 4).attr('y', mouse[1]-8);
+				}
+			});
 	}
 	
 }
 
-function goTo() {
-	document.getElementById('SVG').style.width = "35%";
-	document.getElementById('graph').style.display = 'initial';
+function goTo(variables) {
+	for (x in variables) {
+		if (document.getElementById(variables[x]).checked) {
+			variable = document.getElementById(variables[x])
+		}
+	}if (typeof(variable) != 'undefined') {
+		document.getElementById('SVG').style.width = "35%";
+		document.getElementById('graph').style.display = 'initial';
+	}
 }
 
 function back() {
@@ -145,7 +167,8 @@ function getData(d, v) {
 	return l
 }
 
-function drawMap(v, data, slider = 0){
+
+function drawMap(v, data, slider, w, h, legend, parent, slide = false){
 	if (slider.value > 1950) {
 		document.getElementById('sliderText').innerHTML = 'Year: ' + slider.value;
 	}
@@ -159,13 +182,11 @@ function drawMap(v, data, slider = 0){
 	var min = d3.min(vals, function (array) {
 		return d3.min([array[slider.value - slider.min]]);
 	});
-	console.log(min + ', ' + max)
 	var stateNames = Object.getOwnPropertyNames(d);
 	for (var i = 0; i < stateNames.length; i++) {
 		var state = d3.select('#' + Object.getOwnPropertyNames(d)[i]);
 		if (v != 'Guns per household') {
 			var value = d[stateNames[i]][slider.value - slider.min]
-			console.log(value + ', ' + stateNames[i]);
 		} else {
 			if (slider.value == 0) {var value = d[stateNames[i]][2];}
 			else if (slider.value == 2) {var value = d[stateNames[i]][0];}
@@ -174,4 +195,11 @@ function drawMap(v, data, slider = 0){
 		var color = d3.scale.linear().domain([min, max]).range(['#f7fcf5', '#00441b']); //http://bl.ocks.org/darrenjaworski/5874214
 		state.style('fill', function() {return color(value);});
 	}
+	parent.selectAll('#legend').remove();
+	parent.append("rect").attr('id', 'legend').attr("width", 400).attr("height", h-50).style("fill", "url(#gradient)").attr("transform", "translate(0,10)");
+	var x = d3.scale.linear().range([0, 400]).domain([min, max]);
+	var xAxis = d3.svg.axis().scale(x).tickSize(1);
+	parent.append("g").attr('id', 'legend').attr("class", "x axis").attr("transform", "translate(0,20)").call(xAxis)
+		.append("text").text(document.getElementById(v).value).attr("y", 30).attr('font-size', '10px');
+	d3.selectAll('.tick').style('font-size', '10px');
 }
