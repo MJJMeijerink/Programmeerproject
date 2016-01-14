@@ -35,4 +35,5 @@
 * Enkele problemen opgelost met data die in omgekeerde volgorde wordt opgehaald
 
 # Day 9
-* 
+* Besloten om Chart.js te gebruiken voor het maken van stijlvolle grafieken: http://www.chartjs.org/
+* Het klikken op een staat laat nu een grafiek zien naast de kaart, de grafiek visualiseert data van de betreffende staat en variabele over alle jaren waarvoor de data beschikbaar is
