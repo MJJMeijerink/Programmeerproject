@@ -3,11 +3,6 @@ function ready() { // Load SVG before doing ANYTHING
 	var variables = ['Violent Crime rate', 'Forcible rape rate', 'Robbery rate', 'Aggravated assault rate', 'Murder rate',
 					'Property crime rate', 'Burglary rate', 'Larceny-theft rate', 'Motor vehicle theft rate', 'Unemployment', 'Guns per household']
 	
-	for (var i = 0; i < Object.keys(states).length; i++) {
-		var state = d3.select('#' + Object.keys(states)[i]);
-		state.on('click', function(){goTo(variables);}).attr('class', 'state');
-	}
-		
 	for (v in variables) {
 		document.getElementById(variables[v]).checked = false;
 	}
@@ -28,6 +23,11 @@ function ready() { // Load SVG before doing ANYTHING
 	
 	function dataLoaded(){
 		var data = JSON.parse(this.responseText);
+		
+		for (var i = 0; i < Object.keys(states).length; i++) {
+			var state = d3.select('#' + Object.keys(states)[i]);
+			state.on('click', function(){goTo(variables, this, data);}).attr('class', 'state');
+		}	
 	
 		slider = document.getElementById('slider')
 		
@@ -140,20 +140,42 @@ function ready() { // Load SVG before doing ANYTHING
 	
 }
 
-function goTo(variables) {
-	for (x in variables) {
-		if (document.getElementById(variables[x]).checked) {
-			variable = document.getElementById(variables[x])
+function goTo(variables, state, data) {
+	if (state.id != 'DC') {
+		if (!$('#graph').is(':visible')) {
+			var parent = document.getElementById("graph");
+			var canvas = document.createElement('canvas');
+			canvas.id = 'chart';
+			parent.appendChild(canvas);
+		}else {
+			var parent = document.getElementById('graph');
+			var canvas = document.getElementById('chart');
+			parent.removeChild(canvas);
+			var parent = document.getElementById("graph");
+			var canvas = document.createElement('canvas');
+			canvas.id = 'chart';
+			parent.appendChild(canvas);
 		}
-	}if (typeof(variable) != 'undefined') {
-		document.getElementById('SVG').style.width = "35%";
-		document.getElementById('graph').style.display = 'initial';
+		for (x in variables) {
+			if (document.getElementById(variables[x]).checked) {
+				variable = document.getElementById(variables[x])
+			}
+		}if (typeof(variable) != 'undefined') {
+			$( "#SVG" ).animate({width: '35%'});
+			setTimeout(function(){ 
+				$( "#graph" ).fadeIn( "slow");
+				makeChart(variable.id, state.id, data);
+			}, 350);
+		}
 	}
 }
 
 function back() {
 	document.getElementById('graph').style.display = 'none';
-	document.getElementById('SVG').style.width = "65%";
+	$( "#SVG" ).animate({width: '65%'});
+	var parent = document.getElementById('graph');
+	var canvas = document.getElementById('chart');
+	parent.removeChild(canvas);
 }
 
 function getData(d, v) {
@@ -177,10 +199,22 @@ function drawMap(v, data, slider, w, h, legend, parent, slide = false){
 		return d[key];
 	});
 	var max = d3.max(vals, function(array) {
-		return d3.max([array[slider.value - slider.min]]);
+		if (v != 'Guns per household') {
+			return d3.max([array[slider.value - slider.min]]);
+		}else{
+			if (slider.value == 0) {return d3.max([array[2]]);}
+			else if (slider.value == 2) {return d3.max([array[0]]);}
+			else return d3.max([array[1]])
+		}
 	});
 	var min = d3.min(vals, function (array) {
-		return d3.min([array[slider.value - slider.min]]);
+		if (v != 'Guns per household') {
+			return d3.min([array[slider.value - slider.min]]);
+		}else{
+			if (slider.value == 0) {return d3.min([array[2]]);}
+			else if (slider.value == 2) {return d3.min([array[0]]);}
+			else return d3.min([array[1]])
+		}
 	});
 	var stateNames = Object.getOwnPropertyNames(d);
 	for (var i = 0; i < stateNames.length; i++) {
@@ -200,6 +234,39 @@ function drawMap(v, data, slider, w, h, legend, parent, slide = false){
 	var x = d3.scale.linear().range([0, 400]).domain([min, max]);
 	var xAxis = d3.svg.axis().scale(x).tickSize(1);
 	parent.append("g").attr('id', 'legend').attr("class", "x axis").attr("transform", "translate(0,20)").call(xAxis)
-		.append("text").text(document.getElementById(v).value).attr("y", 30).attr('font-size', '10px');
+		.append("text").text(document.getElementById(v).value).attr("y", 30).style("text-anchor","right").attr('font-size', '10px');
 	d3.selectAll('.tick').style('font-size', '10px');
+}
+
+function makeChart(variable, state, d) {
+	document.getElementById('titleText').innerHTML = states[state] + ' - ' + variable;
+	var data = {}
+	var selectionData = d[0][states[state]][variable];
+	var labels = Object.keys(selectionData);
+	var values = [];
+	for(var key in selectionData) values.push(selectionData[key]);
+	if (variable == 'Guns per household') {
+		values.reverse();
+		labels.reverse();
+	}
+	data['labels'] = labels;
+	data['datasets'] =  [{
+            label: states[state],
+            fillColor: "rgba(158,186,166,0.2)",
+            strokeColor: "#9EBAA6",
+            pointColor: "#9EBAA6",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "green",
+            pointHighlightStroke: "#fff",
+            data: values
+        }];
+	var options = {
+		pointHitDetectionRadius : 0,
+	};
+	var ctx = document.getElementById("chart").getContext("2d");
+	var lineChart = new Chart(ctx).Line(data,options);
+}
+
+function makeComparison() {
+	var person = prompt("Please enter your name", "Harry Potter");
 }

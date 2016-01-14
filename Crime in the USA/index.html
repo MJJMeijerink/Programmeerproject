@@ -9,6 +9,7 @@
 		<link rel="shortcut icon" href="http://mjjmeijerink.github.io/Design/images/icon.ico" type="image/x-icon" /> 
 
 		<script src="javascript/jquery-2.1.4.min.js"></script>
+		<script src="javascript/Chart.min.js"></script>
 		<script src="javascript/d3.min.js"></script>
 		<script src="javascript/states.js"></script>
 		<script src="javascript/visualization.js"></script>
@@ -25,7 +26,7 @@
 	 
 			<div id="wrapper">
 				<div id="compare">
-					<button type="button" onclick = "goTo();">Compare states</button>
+					<button type="button" onclick = "makeComparison();">Compare states</button>
 				</div>
 
 				<div id='buttons'>
@@ -289,7 +290,9 @@
 					<div id="back">
 						<button type="button" onclick="back();">&#10006;</button>
 					</div>
-					<svg id = "SVG2"> </svg>
+					<div id='title'>
+						<h1 id='titleText'></h1>
+					</div>
 				</div>
 				<div id="slide">
 					<strong id="sliderText">Year</strong><br><br>
