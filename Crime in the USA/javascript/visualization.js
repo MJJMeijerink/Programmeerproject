@@ -43,6 +43,9 @@ function ready() { // Load SVG before doing ANYTHING
 				slider.max = 2;
 			}
 			drawMap(this.id, data, slider, w, h, legend, parent);
+			if ($('#graph').is(':visible')) {
+				back();
+			}
 		});
 
 		slider.oninput = function () {
@@ -193,6 +196,11 @@ function getData(d, v) {
 function drawMap(v, data, slider, w, h, legend, parent, slide = false){
 	if (slider.value > 1950) {
 		document.getElementById('sliderText').innerHTML = 'Year: ' + slider.value;
+	}else {
+		if (slider.value == 0) {var inner = 'Year: 1981 - 1990'}
+		else if (slider.value == 1) { var inner = 'Year: 1991 - 2000'}
+		else var inner = 'Year: 2001 - 2010';
+		document.getElementById('sliderText').innerHTML = inner;
 	}
 	var d = getData(data, v);
 	var vals = Object.keys(d).map(function (key) {
