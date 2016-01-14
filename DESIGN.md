@@ -25,7 +25,9 @@
 
 ## API's/Frameworks
 * CSS/HTML
-* Javascript --> D3 (+ topojson)
+* D3.js
+* JQuery.js
+* Chart.js
 * XMLHttpRequest
 
 ## Data
