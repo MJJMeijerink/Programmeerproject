@@ -28,3 +28,11 @@
 * Kleuren voor de datamap gekozen
 * Alle variabelen kunnen nu worden gevisualiseerd op de kaart
 * Enkele outliers uit de data gehaald zodat de data beter gevisualiseerd wordt
+
+# Day 8
+* Legenda gemaakt voor de kaart
+* Tooltips gemaakt voor de kaart
+* Enkele problemen opgelost met data die in omgekeerde volgorde wordt opgehaald
+
+# Day 9
+* 
