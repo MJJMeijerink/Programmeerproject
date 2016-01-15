@@ -1,6 +1,6 @@
 function ready() { // Load SVG before doing ANYTHING
 
-	var variables = ['Violent Crime rate', 'Forcible rape rate', 'Robbery rate', 'Aggravated assault rate', 'Murder rate',
+	var variables = ['Violent crime rate', 'Forcible rape rate', 'Robbery rate', 'Aggravated assault rate', 'Murder rate',
 					'Property crime rate', 'Burglary rate', 'Larceny-theft rate', 'Motor vehicle theft rate', 'Unemployment', 'Guns per household']
 	
 	for (v in variables) {
@@ -42,7 +42,7 @@ function ready() { // Load SVG before doing ANYTHING
 				slider.min = 0;
 				slider.max = 2;
 			}
-			drawMap(this.id, data, slider, w, h, legend, parent);
+			drawMap(this.id, data, slider, w, h, legend, parent, false);
 			if ($('#graph').is(':visible')) {
 				back();
 			}
@@ -86,7 +86,7 @@ function ready() { // Load SVG before doing ANYTHING
 				tTip.parentNode.appendChild(tTip);
 				tooltip.style('display', 'initial');
 			}).on('mouseout', function(){
-				d3.select(this).style('stroke-width', 0.28222218);
+				d3.select(this).style('stroke-width', 0.28222218).style('fill-opacity', 1);
 				tooltip.style('display', 'none')
 			}).on('mousemove', function() {
 				var el = this;
@@ -164,17 +164,17 @@ function goTo(variables, state, data) {
 				variable = document.getElementById(variables[x])
 			}
 		}if (typeof(variable) != 'undefined') {
+			document.getElementById("compare").style.display = 'none';
 			$( "#SVG" ).animate({width: '35%'});
-			setTimeout(function(){ 
-				$( "#graph" ).fadeIn( "slow");
-				makeChart(variable.id, state.id, data);
-			}, 350);
+			$( "#graph" ).fadeIn( "slow");
+			makeChart(variable.id, state.id, data);
 		}
 	}
 }
 
 function back() {
 	document.getElementById('graph').style.display = 'none';
+	document.getElementById('compare').style.display = 'initial';
 	$( "#SVG" ).animate({width: '65%'});
 	var parent = document.getElementById('graph');
 	var canvas = document.getElementById('chart');
@@ -193,7 +193,7 @@ function getData(d, v) {
 }
 
 
-function drawMap(v, data, slider, w, h, legend, parent, slide = false){
+function drawMap(v, data, slider, w, h, legend, parent, slide){
 	if (slider.value > 1950) {
 		document.getElementById('sliderText').innerHTML = 'Year: ' + slider.value;
 	}else {

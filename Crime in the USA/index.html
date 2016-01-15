@@ -25,14 +25,10 @@
 			</div>
 	 
 			<div id="wrapper">
-				<div id="compare">
-					<button type="button" onclick = "makeComparison();">Compare states</button>
-				</div>
-
 				<div id='buttons'>
 					<form action="">
 						<strong>Crime: 1960-2012</strong><br>
-						<input type="radio" name="variable" class="radButton" id="Violent Crime rate" value="Violent crime reports per 100,000 inhabitants"> Violent crime<br>
+						<input type="radio" name="variable" class="radButton" id="Violent crime rate" value="Violent crime reports per 100,000 inhabitants"> Violent crime<br>
 						<input type="radio" name="variable" class="radButton" id= "Forcible rape rate" value="Rape reports per 100,000 inhabitants"> Rape<br>
 						<input type="radio" name="variable" class="radButton" id="Robbery rate" value="Robbery reports per 100,000 inhabitants"> Robbery<br>
 						<input type="radio" name="variable" class="radButton" id="Aggravated assault rate" value="Assault reports per 100,000 inhabitants"> Assault<br>
@@ -292,6 +288,49 @@
 					</div>
 					<div id='title'>
 						<h1 id='titleText'></h1>
+					</div>
+				</div>
+				<div id="compare">
+					<div id="header"><h3 id="headerText">Compare states</h3></div>
+					<div id="states">
+						<div id="checkboxes">
+							<form onsubmit="return makeComparison();" id="compareForm">
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+								<div class="wrap"><label><span class="label">label</span><input class="checkboxes" type="checkbox" /></label> </div>
+							</form>
+						</div>
+					</div>
+					<div id="buttonWrap">
+						<button type="submit" form="compareForm" value="Submit" id="submitButton">Compare</button>
 					</div>
 				</div>
 				<div id="slide">
