@@ -37,3 +37,6 @@
 # Day 9
 * Besloten om Chart.js te gebruiken voor het maken van stijlvolle grafieken: http://www.chartjs.org/
 * Het klikken op een staat laat nu een grafiek zien naast de kaart, de grafiek visualiseert data van de betreffende staat en variabele over alle jaren waarvoor de data beschikbaar is
+
+# Day 10
+* Begonnen aan een venster aan de zijkant van de kaart waar je states kunt selecteren die je met elkaar wil vergelijken. De vergelijking gaat op dezelfde plek worden weergegeven als de lijngrafiek, alleen dan als staafgrafiek en niet over alle jaren.
