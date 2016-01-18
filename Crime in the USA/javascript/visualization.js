@@ -1,3 +1,4 @@
+var barChart;
 function ready() { // Load SVG before doing ANYTHING
 
 	var variables = ['Violent crime rate', 'Forcible rape rate', 'Robbery rate', 'Aggravated assault rate', 'Murder rate',
@@ -24,12 +25,16 @@ function ready() { // Load SVG before doing ANYTHING
 	function dataLoaded(){
 		var data = JSON.parse(this.responseText);
 		
+		slider = document.getElementById('slider')
+		
 		for (var i = 0; i < Object.keys(states).length; i++) {
 			var state = d3.select('#' + Object.keys(states)[i]);
-			state.on('click', function(){goTo(variables, this, data);}).attr('class', 'state');
+			state.on('click', function() {
+				if (this.id != 'DC') {
+					goTo(variables, this.id, data, slider);
+				}
+			}).attr('class', 'state');
 		}	
-	
-		slider = document.getElementById('slider')
 		
 		d3.selectAll('.radButton').on('click', function () {
 			if (~this.id.indexOf('rate')) { //http://stackoverflow.com/a/1789952
@@ -44,11 +49,13 @@ function ready() { // Load SVG before doing ANYTHING
 			}
 			drawMap(this.id, data, slider, w, h, legend, parent, false);
 			if ($('#graph').is(':visible')) {
-				back();
+				if (document.getElementById('chart').value != undefined) {
+					update(barChart, slider, data, this.id);
+				} else back();
 			}
 		});
 
-		slider.oninput = function () {
+		slider.onchange = function () {
 			for (x in variables) {
 				if (document.getElementById(variables[x]).checked) {
 					v = document.getElementById(variables[x])
@@ -56,6 +63,11 @@ function ready() { // Load SVG before doing ANYTHING
 			}
 			if (slider.max > 0) {
 				drawMap(v.id, data, slider, w, h, legend, parent, true);
+				if ($('#graph').is(':visible')) {
+					if (document.getElementById('chart').value != undefined) {
+						update(barChart, slider, data, v.id);
+					}
+				}
 			}
 			if (slider.value > 1950) {
 				document.getElementById('sliderText').innerHTML = 'Year: ' + slider.value;
@@ -78,7 +90,7 @@ function ready() { // Load SVG before doing ANYTHING
 		
 		d3.selectAll('.state')
 			.on('mouseover', function(){
-				d3.select(this).style('cursor', 'hand').style('cursor', 'pointer').style('stroke-width', 0.6);
+				d3.select(this).style('cursor', 'pointer').style('stroke-width', 0.6);
 				this.parentNode.appendChild(this);
 				var labels = document.getElementById('labels')
 				labels.parentNode.appendChild(labels);
@@ -86,7 +98,7 @@ function ready() { // Load SVG before doing ANYTHING
 				tTip.parentNode.appendChild(tTip);
 				tooltip.style('display', 'initial');
 			}).on('mouseout', function(){
-				d3.select(this).style('stroke-width', 0.28222218).style('fill-opacity', 1);
+				d3.select(this).style('stroke-width', 0.28222218);
 				tooltip.style('display', 'none')
 			}).on('mousemove', function() {
 				var el = this;
@@ -139,43 +151,65 @@ function ready() { // Load SVG before doing ANYTHING
 					text1.attr('x', mouse[0] - textWidth - 4).attr('y', mouse[1]-8);
 				}
 			});
+			
+		d3.selectAll('.label').on('mouseover', function () {
+			d3.select(this).style('cursor', 'pointer')
+			d3.select('#SVG').select('#' + this.id).style('stroke-width', 0.6);
+			document.getElementById(this.id).parentNode.appendChild(document.getElementById(this.id));
+			var labels = document.getElementById('labels')
+			labels.parentNode.appendChild(labels);
+		}).on('mouseout', function() {
+			d3.select('#SVG').select('#' + this.id).style('stroke-width', 0.28222218);
+		});
+		
+		d3.select('#submitButton').on('click', function() {
+			var selected = [];
+			$('#checkboxes :checked').each(function() { //http://stackoverflow.com/a/786215
+				selected.push($(this).val());
+			});
+			if (selected.length < 2) {alert("Please select at least two states to compare.")}
+			//else if (selected.length > 8) {alert("Sorry! You can compare a maximum of eight states.")}
+			else goTo(variables, selected, data, slider);
+		});
 	}
-	
 }
 
-function goTo(variables, state, data) {
-	if (state.id != 'DC') {
-		if (!$('#graph').is(':visible')) {
-			var parent = document.getElementById("graph");
-			var canvas = document.createElement('canvas');
-			canvas.id = 'chart';
-			parent.appendChild(canvas);
-		}else {
-			var parent = document.getElementById('graph');
-			var canvas = document.getElementById('chart');
-			parent.removeChild(canvas);
-			var parent = document.getElementById("graph");
-			var canvas = document.createElement('canvas');
-			canvas.id = 'chart';
-			parent.appendChild(canvas);
-		}
-		for (x in variables) {
-			if (document.getElementById(variables[x]).checked) {
-				variable = document.getElementById(variables[x])
-			}
-		}if (typeof(variable) != 'undefined') {
-			document.getElementById("compare").style.display = 'none';
-			$( "#SVG" ).animate({width: '35%'});
-			$( "#graph" ).fadeIn( "slow");
-			makeChart(variable.id, state.id, data);
-		}
+function goTo(variables, state, data, slider) {
+	if (!$('#graph').is(':visible')) {
+		var parent = document.getElementById("graph");
+		var canvas = document.createElement('canvas');
+		canvas.id = 'chart';
+		parent.appendChild(canvas);
+	}else {
+		var parent = document.getElementById('graph');
+		var canvas = document.getElementById('chart');
+		parent.removeChild(canvas);
+		var parent = document.getElementById("graph");
+		var canvas = document.createElement('canvas');
+		canvas.id = 'chart';
+		parent.appendChild(canvas);
 	}
+	for (x in variables) {
+		if (document.getElementById(variables[x]).checked) {
+			variable = document.getElementById(variables[x])
+		}
+	}if (typeof(variable) != 'undefined') {
+		$("#compare").fadeOut(300);
+		$( "#SVG" ).animate({width: '35%'}, 400, function() {
+			$( "#graph" ).fadeIn( "slow");
+			if (typeof(state) != 'string'){
+				canvas.value = 'bar';
+				makeComparison(variable.id, state, data, slider);
+			} else makeChart(variable.id, state, data);
+		});
+	}else alert('Please select a variable to visualize.')
 }
 
 function back() {
-	document.getElementById('graph').style.display = 'none';
-	document.getElementById('compare').style.display = 'initial';
-	$( "#SVG" ).animate({width: '65%'});
+	$( "#graph" ).fadeOut(400, function() {
+		$( "#SVG" ).animate({width: '65%'});
+		$("#compare").fadeIn("slow");
+	});
 	var parent = document.getElementById('graph');
 	var canvas = document.getElementById('chart');
 	parent.removeChild(canvas);
@@ -275,6 +309,64 @@ function makeChart(variable, state, d) {
 	var lineChart = new Chart(ctx).Line(data,options);
 }
 
-function makeComparison() {
-	var person = prompt("Please enter your name", "Harry Potter");
+function makeComparison(variable, state, d, slider) {
+	if (slider.value == 0) {
+		var year = '2001 - 2010';
+	} else if (slider.value == 1) {
+		var year = '1991 - 2000';			
+	} else if (slider.value == 2) {
+		var year = '1981 - 1990';
+	}else var year = slider.value;
+	document.getElementById('titleText').innerHTML = variable + ' - ' + year;
+	var data = {};
+	var dataSet = [];
+	var labels = [];
+	for (s in state) {
+		labels.push(states[state[s]])
+		var stateData = d[0][states[state[s]]][variable][year];
+		if (stateData == undefined) {
+			stateData = 0;
+		}
+		dataSet.push(stateData);
+	}
+	data['labels'] = labels;
+	data['datasets'] = [{
+            label: 'Comparison',
+            fillColor: "rgba(158,186,166,0.2)",
+            strokeColor: "#9EBAA6",
+            pointColor: "#9EBAA6",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "green",
+            pointHighlightStroke: "#fff",
+            data: dataSet
+        }];
+	var ctx = document.getElementById("chart").getContext("2d");
+	barChart = new Chart(ctx).Bar(data);
+}
+
+function update(barChart, slider, d, variable) {
+	if (slider.value == 0) {
+		var year = '2001 - 2010';
+	} else if (slider.value == 1) {
+		var year = '1991 - 2000';			
+	} else if (slider.value == 2) {
+		var year = '1981 - 1990';
+	}else var year = slider.value;
+	document.getElementById('titleText').innerHTML = variable + ' - ' + year;
+	var stateList = [];
+	$('#checkboxes :checked').each(function() { //http://stackoverflow.com/a/786215
+		stateList.push($(this).val());
+	});
+	dataSet = [];
+	for (s in stateList) {
+		var stateData = d[0][states[stateList[s]]][variable][year];
+		if (stateData == undefined) {
+			stateData = 0;
+		}
+		dataSet.push(stateData);
+	}
+	for (dataPoint in barChart.datasets[0].bars) {
+		barChart.datasets[0].bars[dataPoint].value = dataSet[dataPoint]
+	}
+	barChart.update();
 }
