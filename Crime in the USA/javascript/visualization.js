@@ -22,6 +22,20 @@ function ready() { // Load SVG before doing ANYTHING
 	loadData.open("get", "data/data.json", true);
 	loadData.send();
 	
+	var selectAll = document.getElementById('selectAll');
+	selectAll.onclick = function() {
+		var elements = document.getElementsByClassName('checkboxes');
+		if (this.checked == true) {
+			for (el in elements) {
+				elements[el].checked = true;
+			}
+		}else if (this.checked == false) {
+			for (el in elements) {
+				elements[el].checked = false;
+			}
+		}
+	}
+	
 	function dataLoaded(){
 		var data = JSON.parse(this.responseText);
 		
@@ -346,13 +360,19 @@ function makeComparison(variable, state, d, slider) {
 
 function update(barChart, slider, d, variable) {
 	if (slider.value == 0) {
+		var displayYear = '1981 - 1990';
 		var year = '2001 - 2010';
 	} else if (slider.value == 1) {
+		var displayYear = '1991 - 2000';
 		var year = '1991 - 2000';			
 	} else if (slider.value == 2) {
+		var displayYear = '2001 - 2010';
 		var year = '1981 - 1990';
-	}else var year = slider.value;
-	document.getElementById('titleText').innerHTML = variable + ' - ' + year;
+	}else {
+		var displayYear = slider.value;
+		var year = slider.value;
+	}
+	document.getElementById('titleText').innerHTML = variable + ' - ' + displayYear;
 	var stateList = [];
 	$('#checkboxes :checked').each(function() { //http://stackoverflow.com/a/786215
 		stateList.push($(this).val());
@@ -369,4 +389,17 @@ function update(barChart, slider, d, variable) {
 		barChart.datasets[0].bars[dataPoint].value = dataSet[dataPoint]
 	}
 	barChart.update();
+}
+
+function navigateSlider(direction) {
+	if (direction == 'left'){
+		if (slider.value > slider.min) {
+			slider.value--;
+		}
+	}else {
+		if (slider.value < slider.max) {
+			slider.value++;
+		}
+	}
+	slider.onchange();
 }
