@@ -60,7 +60,6 @@ html,body {
     width: 17%;
 	height: 400px;
 	margin-top:70px;
-	/*margin-left: -30px;*/
 	}
 #headerText {
 	margin-top: 10px;
@@ -102,6 +101,7 @@ html,body {
 #selectAll{
 	float:right;
 	margin-top:10px;
+	margin-right:27px;
 	}
 	
 #wrapper{
