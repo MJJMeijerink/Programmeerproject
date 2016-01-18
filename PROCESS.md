@@ -40,3 +40,9 @@
 
 # Day 10
 * Begonnen aan een venster aan de zijkant van de kaart waar je states kunt selecteren die je met elkaar wil vergelijken. De vergelijking gaat op dezelfde plek worden weergegeven als de lijngrafiek, alleen dan als staafgrafiek en niet over alle jaren.
+
+# Day 11
+* Barchart toegevoegd
+* Pijl navigatie toegevoegd om makkelijker door de tijd te navigeren
+* Staten vergelijken kan nu
+* test.html toegevoegd om te testen met hogere en lagere resoluties (door middel van een iframe)
