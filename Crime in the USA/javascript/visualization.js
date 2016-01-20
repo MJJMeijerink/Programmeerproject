@@ -1,7 +1,12 @@
 var barChart;
 function ready() { // Load SVG before doing ANYTHING
 
-	var variables = ['Violent crime rate', 'Forcible rape rate', 'Robbery rate', 'Aggravated assault rate', 'Murder rate',
+	if (window.innerHeight<650) {
+		document.getElementById('graph').style.height = '350px';
+		document.getElementById('graph').style.marginTop = '50px';
+	}
+
+	var variables = ['Violent crime rate', 'Forcible rape rate', 'Robbery rate', 'Aggravated assault rate', 'Murder rate', 'Cook PVI',
 					'Property crime rate', 'Burglary rate', 'Larceny-theft rate', 'Motor vehicle theft rate', 'Unemployment', 'Guns per household']
 	
 	for (v in variables) {
@@ -54,12 +59,19 @@ function ready() { // Load SVG before doing ANYTHING
 			if (~this.id.indexOf('rate')) { //http://stackoverflow.com/a/1789952
 				slider.min = 1960;
 				slider.max = 2012;
+				slider.step = 1
 			}else if (this.id == 'Unemployment') {
 				slider.min = 1976;
 				slider.max = 2015;
+				slider.step = 1
+			}else if (this.id == 'Cook PVI') {
+				slider.min = 1960;
+				slider.max = 2012;
+				slider.step = 4;
 			}else {
 				slider.min = 0;
 				slider.max = 2;
+				slider.step = 1
 			}
 			drawMap(this.id, data, slider, w, h, legend, parent, false);
 			if ($('#graph').is(':visible')) {
@@ -133,19 +145,28 @@ function ready() { // Load SVG before doing ANYTHING
 							if (slider.value == 0) {return data[0][states[el.id]][variable.id]['1981 - 1990'];}
 							else if (slider.value == 1) {return data[0][states[el.id]][variable.id]['1991 - 2000'];}
 							else return data[0][states[el.id]][variable.id]['2001 - 2010'];
-						}
-						else {
+						} else if (variable.id == 'Cook PVI') {
+							if (data[0][states[el.id]][variable.id][slider.value] < 0) {
+								return 'Democrats'
+							} else return 'Republicans'
+						} else {
 							return data[0][states[el.id]][variable.id][slider.value];
 						}
 					}).attr('x', mouse[0] + 4).attr('y', mouse[1]-4.5);
-					var textWidth = document.getElementById('tooltipText1').getComputedTextLength();
+					var textWidth1 = document.getElementById('tooltipText1').getComputedTextLength();
+					var textWidth2 = document.getElementById('tooltipText2').getComputedTextLength();
+					if (textWidth1 > textWidth2) {var textWidth = textWidth1;}
+					else var textWidth = textWidth2;
 					d3.select('#tooltipRect').attr('width', textWidth + 5)
 				} else {
 					var text1 = d3.select('#tooltipText1')
 					text1.text(function(){
 						return states[el.id];
 					});
-					var textWidth = document.getElementById('tooltipText1').getComputedTextLength();
+					var textWidth1 = document.getElementById('tooltipText1').getComputedTextLength();
+					var textWidth2 = document.getElementById('tooltipText2').getComputedTextLength();
+					if (textWidth1 > textWidth2) {var textWidth = textWidth1;}
+					else var textWidth = textWidth2;
 					d3.select('#tooltipRect').attr('x', mouse[0] - textWidth - 6).attr('y', mouse[1] - 12);
 					d3.select('#tooltipText2').text(function(){
 						if (variable == undefined) {return '-'}
@@ -156,8 +177,11 @@ function ready() { // Load SVG before doing ANYTHING
 							if (slider.value == 0) {return data[0][states[el.id]][variable.id]['2001 - 2010'];}
 							else if (slider.value == 1) {return data[0][states[el.id]][variable.id]['1991 - 2000'];}
 							else return data[0][states[el.id]][variable.id]['1981 - 1990'];
-						}
-						else {
+						} else if (variable.id == 'Cook PVI') {
+							if (data[0][states[el.id]][variable.id][slider.value] < 0) {
+								return 'Democrats'
+							} else return 'Republicans'
+						} else {
 							return data[0][states[el.id]][variable.id][slider.value];
 						}
 					}).attr('x', mouse[0] - textWidth - 4).attr('y', mouse[1]-4.5);
@@ -182,7 +206,6 @@ function ready() { // Load SVG before doing ANYTHING
 				selected.push($(this).val());
 			});
 			if (selected.length < 2) {alert("Please select at least two states to compare.")}
-			//else if (selected.length > 8) {alert("Sorry! You can compare a maximum of eight states.")}
 			else goTo(variables, selected, data, slider);
 		});
 	}
@@ -232,9 +255,21 @@ function back() {
 function getData(d, v) {
 	var l = {};
 	for (var x in d[0]) {
-		var vals = Object.keys(d[0][x][v]).map(function (key) {
-			return d[0][x][v][key];
-		});
+		if (v == 'Cook PVI') {
+			var sortable = [];
+			for (var dataPoint in d[0][x][v]) {
+				  sortable.push([dataPoint, d[0][x][v][dataPoint]])
+			}
+			sortable.sort(function(a, b) {return a[0] - b[0]})
+			var vals = [];
+			for (value in sortable) {
+				vals.push(sortable[value][1])
+			}
+		}else {
+			var vals = Object.keys(d[0][x][v]).map(function (key) {
+				return d[0][x][v][key];
+			});
+		}
 		l[d[0][x]['Name']]=vals;
 	}
 	return l
@@ -254,56 +289,84 @@ function drawMap(v, data, slider, w, h, legend, parent, slide){
 	var vals = Object.keys(d).map(function (key) {
 		return d[key];
 	});
-	var max = d3.max(vals, function(array) {
-		if (v != 'Guns per household') {
-			return d3.max([array[slider.value - slider.min]]);
-		}else{
-			if (slider.value == 0) {return d3.max([array[2]]);}
-			else if (slider.value == 2) {return d3.max([array[0]]);}
-			else return d3.max([array[1]])
-		}
-	});
-	var min = d3.min(vals, function (array) {
-		if (v != 'Guns per household') {
-			return d3.min([array[slider.value - slider.min]]);
-		}else{
-			if (slider.value == 0) {return d3.min([array[2]]);}
-			else if (slider.value == 2) {return d3.min([array[0]]);}
-			else return d3.min([array[1]])
-		}
-	});
+	if (v != 'Cook PVI') {
+		var max = d3.max(vals, function(array) {
+			if (v != 'Guns per household') {
+				return d3.max([array[slider.value - slider.min]]);
+			}else{
+				if (slider.value == 0) {return d3.max([array[2]]);}
+				else if (slider.value == 2) {return d3.max([array[0]]);}
+				else return d3.max([array[1]])
+			}
+		});
+		var min = d3.min(vals, function (array) {
+			if (v != 'Guns per household') {
+				return d3.min([array[slider.value - slider.min]]);
+			}else{
+				if (slider.value == 0) {return d3.min([array[2]]);}
+				else if (slider.value == 2) {return d3.min([array[0]]);}
+				else return d3.min([array[1]])
+			}
+		});
+		var color = d3.scale.linear().domain([min, max]).range(['#f7fcf5', '#00441b']); //http://bl.ocks.org/darrenjaworski/5874214
+	}
 	var stateNames = Object.getOwnPropertyNames(d);
 	for (var i = 0; i < stateNames.length; i++) {
 		var state = d3.select('#' + Object.getOwnPropertyNames(d)[i]);
-		if (v != 'Guns per household') {
+		if (v != 'Guns per household' && v != 'Cook PVI') {
 			var value = d[stateNames[i]][slider.value - slider.min]
-		} else {
+		} else if (v == 'Cook PVI') {
+			var value = d[stateNames[i]][(slider.value - slider.min) / 4]
+		}else {
 			if (slider.value == 0) {var value = d[stateNames[i]][2];}
 			else if (slider.value == 2) {var value = d[stateNames[i]][0];}
 			else {var value = d[stateNames[i]][1];}
 		}
-		var color = d3.scale.linear().domain([min, max]).range(['#f7fcf5', '#00441b']); //http://bl.ocks.org/darrenjaworski/5874214
-		state.style('fill', function() {return color(value);});
+		if (v == 'Cook PVI') {
+			state.style('fill', function() {
+				if (value < 0) {
+					return 'blue';
+				} else return 'red';
+			});
+		}else state.style('fill', function() {return color(value);});
 	}
-	parent.selectAll('#legend').remove();
-	parent.append("rect").attr('id', 'legend').attr("width", 400).attr("height", h-50).style("fill", "url(#gradient)").attr("transform", "translate(0,10)");
-	var x = d3.scale.linear().range([0, 400]).domain([min, max]);
-	var xAxis = d3.svg.axis().scale(x).tickSize(1);
-	parent.append("g").attr('id', 'legend').attr("class", "x axis").attr("transform", "translate(0,20)").call(xAxis)
-		.append("text").text(document.getElementById(v).value).attr("y", 30).style("text-anchor","right").attr('font-size', '10px');
-	d3.selectAll('.tick').style('font-size', '10px');
+	if (v != 'Cook PVI') {
+		parent.selectAll('#legend').remove();
+		parent.append("rect").attr('id', 'legend').attr("width", 400).attr("height", h-50).style("fill", "url(#gradient)").attr("transform", "translate(0,10)");
+		var x = d3.scale.linear().range([0, 400]).domain([min, max]);
+		var xAxis = d3.svg.axis().scale(x).tickSize(1);
+		parent.append("g").attr('id', 'legend').attr("class", "x axis").attr("transform", "translate(0,20)").call(xAxis)
+			.append("text").text(document.getElementById(v).value).attr("y", 30).style("text-anchor","right").attr('font-size', '10px');
+		d3.selectAll('.tick').style('font-size', '10px');
+	} else {
+		parent.selectAll('#legend').remove();
+	}
 }
 
 function makeChart(variable, state, d) {
 	document.getElementById('titleText').innerHTML = states[state] + ' - ' + variable;
 	var data = {}
-	var selectionData = d[0][states[state]][variable];
-	var labels = Object.keys(selectionData);
-	var values = [];
-	for(var key in selectionData) values.push(selectionData[key]);
-	if (variable == 'Guns per household') {
-		values.reverse();
-		labels.reverse();
+	var selectionData = d[0][states[state]][variable];	
+	if (variable != 'Cook PVI'){
+		var labels = Object.keys(selectionData);
+		var values = [];
+		for(var key in selectionData) values.push(selectionData[key]);
+		if (variable == 'Guns per household') {
+			values.reverse();
+			labels.reverse();
+		}
+	}else {
+		var sortable = [];
+		for (var dataPoint in selectionData) {
+			  sortable.push([dataPoint, selectionData[dataPoint]])
+		}
+		sortable.sort(function(a, b) {return a[0] - b[0]})
+		var labels = [];
+		var values = [];
+		for (x in sortable) {
+			labels.push(sortable[x][0]);
+			values.push(sortable[x][1]);
+		}
 	}
 	data['labels'] = labels;
 	data['datasets'] =  [{
@@ -394,11 +457,11 @@ function update(barChart, slider, d, variable) {
 function navigateSlider(direction) {
 	if (direction == 'left'){
 		if (slider.value > slider.min) {
-			slider.value--;
+			slider.value = parseInt(slider.value) - parseInt(slider.step);
 		}
 	}else {
 		if (slider.value < slider.max) {
-			slider.value++;
+			slider.value = parseInt(slider.value) + parseInt(slider.step);
 		}
 	}
 	slider.onchange();

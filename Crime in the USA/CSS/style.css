@@ -37,6 +37,9 @@ html,body {
 	float:left;
 	width: 65%;
 	}
+#parent {
+	margin-top:-20px;
+	}
 	
 #graph {
 	display:none;
@@ -55,6 +58,8 @@ html,body {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
 	float:left;
+	font-size:12px;
+	line-height:20px;
     border: solid black 1px;
     border-radius: 5px;
     width: 17%;
@@ -119,15 +124,14 @@ html,body {
 	}
 	
 #slider {
-	position:absolute;
+	position:relative;
 	width:100%;
-	margin-bottom:40px;
 	}
 #slide {
 	display:block;
 	width:100%;
 	float:left;
-	margin-top:-30px;
+	margin-top:-20px;
 	}
 input[type=range] {
   -webkit-appearance: none;
