@@ -40,6 +40,13 @@ html,body {
 #parent {
 	margin-top:-20px;
 	}
+#explanation {
+	position: absolute;
+	font-size: 12px;
+	width:35%;
+	margin-left:-20px;
+	text-align:right;
+}
 	
 #graph {
 	display:none;

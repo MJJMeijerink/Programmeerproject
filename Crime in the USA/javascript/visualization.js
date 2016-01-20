@@ -73,6 +73,7 @@ function ready() { // Load SVG before doing ANYTHING
 				slider.max = 2;
 				slider.step = 1
 			}
+			document.getElementById('explanation').innerHTML = null;
 			drawMap(this.id, data, slider, w, h, legend, parent, false);
 			if ($('#graph').is(':visible')) {
 				if (document.getElementById('chart').value != undefined) {
@@ -231,14 +232,21 @@ function goTo(variables, state, data, slider) {
 			variable = document.getElementById(variables[x])
 		}
 	}if (typeof(variable) != 'undefined') {
-		$("#compare").fadeOut(300);
-		$( "#SVG" ).animate({width: '35%'}, 400, function() {
-			$( "#graph" ).fadeIn( "slow");
+		if ($('#graph').is(':visible')) {
 			if (typeof(state) != 'string'){
 				canvas.value = 'bar';
 				makeComparison(variable.id, state, data, slider);
 			} else makeChart(variable.id, state, data);
-		});
+		} else {
+			$("#compare").fadeOut(300);
+			$( "#SVG" ).animate({width: '35%'}, 400, function() {
+				$( "#graph" ).fadeIn( "slow");
+				if (typeof(state) != 'string'){
+					canvas.value = 'bar';
+					makeComparison(variable.id, state, data, slider);
+				} else makeChart(variable.id, state, data);
+			});
+		}
 	}else alert('Please select a variable to visualize.')
 }
 
@@ -250,6 +258,7 @@ function back() {
 	var parent = document.getElementById('graph');
 	var canvas = document.getElementById('chart');
 	parent.removeChild(canvas);
+	document.getElementById('explanation').innerHTML = null;
 }
 
 function getData(d, v) {
@@ -356,6 +365,7 @@ function makeChart(variable, state, d) {
 			labels.reverse();
 		}
 	}else {
+		document.getElementById('explanation').innerHTML = 'Negative values: More democrats <br> Positive values: More republicans';
 		var sortable = [];
 		for (var dataPoint in selectionData) {
 			  sortable.push([dataPoint, selectionData[dataPoint]])
@@ -381,6 +391,7 @@ function makeChart(variable, state, d) {
         }];
 	var options = {
 		pointHitDetectionRadius : 0,
+		scaleBeginAtZero: true
 	};
 	var ctx = document.getElementById("chart").getContext("2d");
 	var lineChart = new Chart(ctx).Line(data,options);
@@ -395,6 +406,9 @@ function makeComparison(variable, state, d, slider) {
 		var year = '1981 - 1990';
 	}else var year = slider.value;
 	document.getElementById('titleText').innerHTML = variable + ' - ' + year;
+	if (variable == 'Cook PVI') {
+		document.getElementById('explanation').innerHTML = 'Negative values: More democrats <br> Positive values: More republicans';
+	}
 	var data = {};
 	var dataSet = [];
 	var labels = [];
@@ -416,9 +430,14 @@ function makeComparison(variable, state, d, slider) {
             pointHighlightFill: "green",
             pointHighlightStroke: "#fff",
             data: dataSet
-        }];
+    }];
+	if (variable == 'Cook PVI') {
+		var options = {
+			scaleBeginAtZero: false
+		}
+	}else var options = {scaleBeginAtZero: true}
 	var ctx = document.getElementById("chart").getContext("2d");
-	barChart = new Chart(ctx).Bar(data);
+	barChart = new Chart(ctx).Bar(data, options);
 }
 
 function update(barChart, slider, d, variable) {
@@ -436,6 +455,12 @@ function update(barChart, slider, d, variable) {
 		var year = slider.value;
 	}
 	document.getElementById('titleText').innerHTML = variable + ' - ' + displayYear;
+	if (variable == 'Cook PVI') {
+		document.getElementById('explanation').innerHTML = 'Negative values: More democrats <br> Positive values: More republicans';
+		barChart.scale.beginAtZero = false;
+	}else {
+		barChart.scale.beginAtZero = true;
+	}
 	var stateList = [];
 	$('#checkboxes :checked').each(function() { //http://stackoverflow.com/a/786215
 		stateList.push($(this).val());
@@ -452,6 +477,7 @@ function update(barChart, slider, d, variable) {
 		barChart.datasets[0].bars[dataPoint].value = dataSet[dataPoint]
 	}
 	barChart.update();
+	console.log(barChart)
 }
 
 function navigateSlider(direction) {
