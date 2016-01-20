@@ -37,9 +37,8 @@ Data over het gemiddelde wapenbezit per huishouden voor de afgelopen drie decenn
 API voor het verzamelen van data van de FBI over misdaad per staat van 1960 tot 2012
 Variabelen: Year, Population, Violent crime total, Murder and nonnegligent Manslaughter, Forcible rape, Robbery, Aggravated assault, Property crime total, Burglary, Larceny-theft, Motor vehicle theft, Violent Crime rate, Murder and nonnegligent manslaughter rate, Forcible rape rate, Robbery rate, Aggravated assault rate, Property crime rate, Burglary rate, Larceny-theft rate, Motor vehicle theft rate. Getallen zijn het aantal gevallen per 100,000 inwoners van de betreffende staat.
 
-* https://www.fbi.gov/about-us/cjis/ucr/crime-in-the-u.s.
-Data over wapengebruik bij moorden verzameld door de FBI.
-Variabelen: Totalmurders, Total firearms, Handguns, Rifles, Shotguns, Firearms (type unknown), Knives or cutting instruments, Other weapons, Hands;fists;feet;etc
+* https://docs.google.com/spreadsheets/d/1rR9wSLHn2nC5oJyyF2gzfcA4JS4VNgIqcj_wAPc-XzE/edit#gid=1370551484
+Spreadsheet met informatie over de Amerikaanse verkiezingen 1828. Ik gebruik hiervan de Cook PVI data.
 
 * http://www.bls.gov/home.htm
 Extra variabele werkloosheid is van deze website afgehaald
