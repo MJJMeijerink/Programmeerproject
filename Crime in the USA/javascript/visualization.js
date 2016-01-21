@@ -135,41 +135,25 @@ function ready() { // Load SVG before doing ANYTHING
 						var variable = document.getElementById(variables[x])
 					}
 				}
+				d3.select('#tooltipText1').text(function(){
+					return states[el.id];
+				});
+				var textWidth1 = document.getElementById('tooltipText1').getComputedTextLength();
+				var textWidth2 = document.getElementById('tooltipText2').getComputedTextLength();
+				if (textWidth1 > textWidth2) {var textWidth = textWidth1;}
+				else var textWidth = textWidth2;
 				if (mouse[0] < 135) {
+					d3.select('#tooltipRect').attr('width', textWidth + 5);
 					d3.select('#tooltipRect').attr('x', mouse[0] + 2).attr('y', mouse[1] - 12);
-					d3.select('#tooltipText1').text(function(){
-						return states[el.id];
-					}).attr('x', mouse[0] + 4).attr('y', mouse[1]-8);
-					d3.select('#tooltipText2').text(function(){
-						if (variable == undefined) {return '-'}
-						else if (variable.id == 'Guns per household') {
-							if (slider.value == 0) {return data[0][states[el.id]][variable.id]['1981 - 1990'];}
-							else if (slider.value == 1) {return data[0][states[el.id]][variable.id]['1991 - 2000'];}
-							else return data[0][states[el.id]][variable.id]['2001 - 2010'];
-						} else if (variable.id == 'Cook PVI') {
-							if (data[0][states[el.id]][variable.id][slider.value] < 0) {
-								return 'Democrats'
-							} else return 'Republicans'
-						} else {
-							return data[0][states[el.id]][variable.id][slider.value];
-						}
-					}).attr('x', mouse[0] + 4).attr('y', mouse[1]-4.5);
-					var textWidth1 = document.getElementById('tooltipText1').getComputedTextLength();
-					var textWidth2 = document.getElementById('tooltipText2').getComputedTextLength();
-					if (textWidth1 > textWidth2) {var textWidth = textWidth1;}
-					else var textWidth = textWidth2;
-					d3.select('#tooltipRect').attr('width', textWidth + 5)
+					d3.select('#tooltipText1').attr('x', mouse[0] + 4).attr('y', mouse[1]-8);
+					d3.select('#tooltipText2').attr('x', mouse[0] + 4).attr('y', mouse[1]-4.5);
 				} else {
-					var text1 = d3.select('#tooltipText1')
-					text1.text(function(){
-						return states[el.id];
-					});
-					var textWidth1 = document.getElementById('tooltipText1').getComputedTextLength();
-					var textWidth2 = document.getElementById('tooltipText2').getComputedTextLength();
-					if (textWidth1 > textWidth2) {var textWidth = textWidth1;}
-					else var textWidth = textWidth2;
 					d3.select('#tooltipRect').attr('x', mouse[0] - textWidth - 6).attr('y', mouse[1] - 12);
-					d3.select('#tooltipText2').text(function(){
+					d3.select('#tooltipText2').attr('x', mouse[0] - textWidth - 4).attr('y', mouse[1]-4.5);
+					d3.select('#tooltipRect').attr('width', textWidth + 5);
+					d3.select('#tooltipText1').attr('x', mouse[0] - textWidth - 4).attr('y', mouse[1]-8);
+				}
+				d3.select('#tooltipText2').text(function(){
 						if (variable == undefined) {return '-'}
 						else if (el.id == 'DC') {
 							return 'NaN'
@@ -185,10 +169,7 @@ function ready() { // Load SVG before doing ANYTHING
 						} else {
 							return data[0][states[el.id]][variable.id][slider.value];
 						}
-					}).attr('x', mouse[0] - textWidth - 4).attr('y', mouse[1]-4.5);
-					d3.select('#tooltipRect').attr('width', textWidth + 5)
-					text1.attr('x', mouse[0] - textWidth - 4).attr('y', mouse[1]-8);
-				}
+					})
 			});
 			
 		d3.selectAll('.label').on('mouseover', function () {
@@ -207,7 +188,9 @@ function ready() { // Load SVG before doing ANYTHING
 				selected.push($(this).val());
 			});
 			if (selected.length < 2) {alert("Please select at least two states to compare.")}
-			else goTo(variables, selected, data, slider);
+			else {
+				goTo(variables, selected, data, slider);
+			}
 		});
 	}
 }
@@ -379,7 +362,19 @@ function makeChart(variable, state, d) {
 		}
 	}
 	data['labels'] = labels;
-	data['datasets'] =  [{
+	if (variable == 'Cook PVI') {
+		data['datasets'] =  [{
+            label: states[state],
+            fillColor: "rgba(0,0,0,0.05)",
+            strokeColor: "rgba(0,0,0,0.1)",
+            pointColor: "#9EBAA6",
+            pointStrokeColor: "rgba(0,0,0,0.8)",
+            pointHighlightFill: "white",
+            pointHighlightStroke: "rgba(0,0,0,0.05)",
+            data: values
+        }];
+	}else {
+		data['datasets'] =  [{
             label: states[state],
             fillColor: "rgba(158,186,166,0.2)",
             strokeColor: "#9EBAA6",
@@ -389,12 +384,32 @@ function makeChart(variable, state, d) {
             pointHighlightStroke: "#fff",
             data: values
         }];
-	var options = {
+	}
+	if (variable == 'Cook PVI') {
+		var options = {
+			pointHitDetectionRadius : 0,
+			scaleBeginAtZero: false
+		}
+	}else var options = {
 		pointHitDetectionRadius : 0,
 		scaleBeginAtZero: true
-	};
+	}
 	var ctx = document.getElementById("chart").getContext("2d");
 	var lineChart = new Chart(ctx).Line(data,options);
+	if (variable == 'Cook PVI') {
+		for (point in lineChart.datasets[0].points) {
+			var p = lineChart.datasets[0].points[point];
+			if (p.value > 0) {
+				p.fillColor = 'red';
+				p.highlightFill = 'red';
+			}else {
+				p.fillColor = 'blue';
+				p.highlightFill = 'blue';
+			}
+		}
+		lineChart.update();
+	}
+	console.log(lineChart)
 }
 
 function makeComparison(variable, state, d, slider) {
@@ -438,6 +453,23 @@ function makeComparison(variable, state, d, slider) {
 	}else var options = {scaleBeginAtZero: true}
 	var ctx = document.getElementById("chart").getContext("2d");
 	barChart = new Chart(ctx).Bar(data, options);
+	if (variable == 'Cook PVI') {
+		for (bar in barChart.datasets[0].bars) {
+			var b = barChart.datasets[0].bars[bar];
+			if (b.value > 0) {
+				b.fillColor = "rgba(255,0,0,0.4)";
+				b.highlightFill = "rgba(255,0,0,0.3)"
+				b.strokeColor = 'red';
+				b.highlightStroke = 'red';
+			}else {
+				b.fillColor = "rgba(0,0,255,0.4)";
+				b.highlightFill = "rgba(0,0,255,0.3)"
+				b.strokeColor = 'blue';
+				b.highlightStroke = 'blue';
+			}
+		}
+		barChart.update();
+	}
 }
 
 function update(barChart, slider, d, variable) {
@@ -476,8 +508,30 @@ function update(barChart, slider, d, variable) {
 	for (dataPoint in barChart.datasets[0].bars) {
 		barChart.datasets[0].bars[dataPoint].value = dataSet[dataPoint]
 	}
+	if (variable == 'Cook PVI') {
+		for (bar in barChart.datasets[0].bars) {
+			var b = barChart.datasets[0].bars[bar];
+			if (b.value > 0) {
+				b.fillColor = "rgba(255,0,0,0.4)";
+				b.highlightFill = "rgba(255,0,0,0.3)"
+				b.strokeColor = 'red';
+				b.hightlightStroke = 'red';
+			}else {
+				b.fillColor = "rgba(0,0,255,0.4)";
+				b.highlightFill = "rgba(0,0,255,0.3)"
+				b.strokeColor = 'blue';
+				b.highlightStroke = 'blue';
+			}
+		}
+	}else {
+		for (bar in barChart.datasets[0].bars) {
+			var b = barChart.datasets[0].bars[bar];
+			b.fillColor = "rgba(158,186,166,0.2)",
+			b.highlightFill = "green"
+			b.strokeColor = '#9EBAA6';
+		}
+	}
 	barChart.update();
-	console.log(barChart)
 }
 
 function navigateSlider(direction) {
