@@ -46,3 +46,15 @@
 * Pijl navigatie toegevoegd om makkelijker door de tijd te navigeren
 * Staten vergelijken kan nu
 * test.html toegevoegd om te testen met hogere en lagere resoluties (door middel van een iframe)
+
+# Day 12
+* Er is nu een 'select all' knop voor het selecteren van staten
+* Veel kleine bugs gefixt (zoals een onnodige animatie bij het switchen naar een andere grafiek)
+
+# Day 13
+* Nieuwe data opgezocht over politiek landschap in de states
+* Cook PVI toegevoegd aan de visualisatie
+* Cook PVI is een variabele met negatieve nummers en de stappen in de tijd zijn 4 jaar ipv 1 jaar, om deze data goed te visualiseren moet ik veel extra code schrijven speciaal voor deze variabele.
+
+# Day 14
+* Cook PVI wordt nu goed gevisualiseerd, met extra kleur in de grafieken om een duidelijker beeld te scheppen
