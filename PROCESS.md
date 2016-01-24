@@ -58,3 +58,6 @@
 
 # Day 14
 * Cook PVI wordt nu goed gevisualiseerd, met extra kleur in de grafieken om een duidelijker beeld te scheppen
+
+# Day 15
+* Besloten om Cook PVI apart te visualiseren zodat de grafiek makkelijker gecustomized can worden.
