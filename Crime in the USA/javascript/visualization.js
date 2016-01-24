@@ -73,11 +73,14 @@ function ready() { // Load SVG before doing ANYTHING
 				slider.max = 2;
 				slider.step = 1
 			}
-			document.getElementById('explanation').innerHTML = null;
 			drawMap(this.id, data, slider, w, h, legend, parent, false);
 			if ($('#graph').is(':visible')) {
 				if (document.getElementById('chart').value != undefined) {
-					update(barChart, slider, data, this.id);
+					var selected = [];
+					$('#checkboxes :checked').each(function() { //http://stackoverflow.com/a/786215
+						selected.push($(this).val());
+					});
+					goTo(variables, selected, data, slider);
 				} else back();
 			}
 		});
@@ -169,7 +172,7 @@ function ready() { // Load SVG before doing ANYTHING
 						} else {
 							return data[0][states[el.id]][variable.id][slider.value];
 						}
-					})
+				})
 			});
 			
 		d3.selectAll('.label').on('mouseover', function () {
@@ -230,7 +233,7 @@ function goTo(variables, state, data, slider) {
 				} else makeChart(variable.id, state, data);
 			});
 		}
-	}else alert('Please select a variable to visualize.')
+	}else alert('Please select a variable to visualize.');
 }
 
 function back() {
@@ -241,7 +244,6 @@ function back() {
 	var parent = document.getElementById('graph');
 	var canvas = document.getElementById('chart');
 	parent.removeChild(canvas);
-	document.getElementById('explanation').innerHTML = null;
 }
 
 function getData(d, v) {
@@ -348,7 +350,6 @@ function makeChart(variable, state, d) {
 			labels.reverse();
 		}
 	}else {
-		document.getElementById('explanation').innerHTML = 'Negative values: More democrats <br> Positive values: More republicans';
 		var sortable = [];
 		for (var dataPoint in selectionData) {
 			  sortable.push([dataPoint, selectionData[dataPoint]])
@@ -414,16 +415,19 @@ function makeChart(variable, state, d) {
 
 function makeComparison(variable, state, d, slider) {
 	if (slider.value == 0) {
+		var displayYear = '1981 - 1990';
 		var year = '2001 - 2010';
 	} else if (slider.value == 1) {
+		var displayYear = '1991 - 2000';
 		var year = '1991 - 2000';			
 	} else if (slider.value == 2) {
+		var displayYear = '2001 - 2010';
 		var year = '1981 - 1990';
-	}else var year = slider.value;
-	document.getElementById('titleText').innerHTML = variable + ' - ' + year;
-	if (variable == 'Cook PVI') {
-		document.getElementById('explanation').innerHTML = 'Negative values: More democrats <br> Positive values: More republicans';
+	}else {
+		var displayYear = slider.value;
+		var year = slider.value;
 	}
+	document.getElementById('titleText').innerHTML = variable + ' - ' + displayYear;
 	var data = {};
 	var dataSet = [];
 	var labels = [];
@@ -448,7 +452,21 @@ function makeComparison(variable, state, d, slider) {
     }];
 	if (variable == 'Cook PVI') {
 		var options = {
-			scaleBeginAtZero: false
+			scaleBeginAtZero: false,
+			scaleLabel: function(valuePayload) {
+				if (valuePayload.value > 0){
+					return "R+" + valuePayload.value;
+				}else if (valuePayload.value == 0){
+					return "Even";
+				}else return "D+" + valuePayload.value.slice(1);
+			},
+			tooltipTemplate: function(valuePayload) {
+				if (valuePayload.value > 0){
+					return valuePayload.label + ": R+" + valuePayload.value;
+				}else if (valuePayload.value == 0){
+					return "Even";
+				}else return valuePayload.label + ": D+" + valuePayload.value.toString().slice(1);
+			}
 		}
 	}else var options = {scaleBeginAtZero: true}
 	var ctx = document.getElementById("chart").getContext("2d");
@@ -473,6 +491,7 @@ function makeComparison(variable, state, d, slider) {
 }
 
 function update(barChart, slider, d, variable) {
+	barChart.stop();
 	if (slider.value == 0) {
 		var displayYear = '1981 - 1990';
 		var year = '2001 - 2010';
@@ -488,7 +507,6 @@ function update(barChart, slider, d, variable) {
 	}
 	document.getElementById('titleText').innerHTML = variable + ' - ' + displayYear;
 	if (variable == 'Cook PVI') {
-		document.getElementById('explanation').innerHTML = 'Negative values: More democrats <br> Positive values: More republicans';
 		barChart.scale.beginAtZero = false;
 	}else {
 		barChart.scale.beginAtZero = true;
