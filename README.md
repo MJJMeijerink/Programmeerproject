@@ -9,5 +9,10 @@ A screenshot of the empty visualization when the page is opened (left) and an ex
 ![Screenshot 2](/doc/Scrnshot2.png)
 An example of a visualization for a single state (left) and an example of a visualization where states are compared (right).
 
+## Acknowledgments
+This visualization uses
+* [JQuery.js](https://jquery.com "JQuery")
+* [Chart.js](http://www.chartjs.org/ "Chart")
+* [D3.js](http://d3js.org/ "D3")
 
 [Copyright (c) 2016 Jan Jaap Meijerink](https://github.com/MJJMeijerink/Programmeerproject/blob/master/LICENSE "License")
