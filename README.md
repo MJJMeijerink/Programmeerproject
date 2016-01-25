@@ -7,7 +7,7 @@ The purpose of this project is to visualize Crime in the United States of Americ
 A screenshot of the empty visualization when the page is opened (left) and an example view when you select a variable (right).
 
 ![Screenshot 2](/doc/Scrnshot2.png)
-A screenshot of 
+An example of a visualization for a single state (left) and an example of a visualization where states are compared (right).
 
 
 [Copyright (c) 2016 Jan Jaap Meijerink](https://github.com/MJJMeijerink/Programmeerproject/blob/master/LICENSE "License")
