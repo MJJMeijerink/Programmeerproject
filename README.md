@@ -15,4 +15,6 @@ This visualization uses
 * [Chart.js](http://www.chartjs.org/ "Chart")
 * [D3.js](http://d3js.org/ "D3")
 
+
+#### License
 [Copyright (c) 2016 Jan Jaap Meijerink](https://github.com/MJJMeijerink/Programmeerproject/blob/master/LICENSE "License")
