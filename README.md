@@ -1,8 +1,8 @@
 # Crime in the USA
 
-## Features
-In deze visualisatie kan de gebruiker misdaadcijfers vergelijken met andere gegevens, zoals wapengebruik, werkloosheid, aantal gevangenen etcetera. Deze cijfers zijn te zien voor elke staat in de USA. De visualisatie begint met een kaart van Amerika die alle staten duidelijk weergeeft. De gerbuiker kan voor bepaalde gegevens zien hoe de elke staat daarvoor scoort, dat wordt aangegeven met een pop up en een textbox in het geval van een mouseover event (welke gegevens dat zijn moet nog worden bepaald). Daarnaast kan de gebruiker op de staten klikken om alle gegevens van die staat op een rijtje te zien in een extra visualisatie. Daarnaast zal de gebruiker de optie krijgen twee staten met elkaar te vergelijken en om gegevens te filteren. De gebruiker zal ook de optie hebben om te kiezen voor welk jaar hij de gegevens wil zien.
+The purpose of this project is to visualize Crime in the United States of America and compare which states it's most dangerous to live in. Additionally we can compare these variables to some demographics like unemployment, the cook PVI and the amount of guns per household. The data spans over several years in recent history. Therefore the changes are visualized over time to easily identify trends in time for the variables.
 
 ## Screenshots
+
 
 [Copyright (c) 2016 Jan Jaap Meijerink](https://github.com/MJJMeijerink/Programmeerproject/blob/master/LICENSE "License")
