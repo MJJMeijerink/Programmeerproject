@@ -56,7 +56,7 @@ function ready() { // Load SVG before doing ANYTHING
 			}).attr('class', 'state');
 		}	
 		
-		d3.selectAll('.radButton').on('click', function () { // Add onclick listener for radiobuttons
+		d3.selectAll('.radButton').on('click', function () { // Add onclick listener for radio-buttons
 			if (~this.id.indexOf('rate')) { //http://stackoverflow.com/a/1789952
 				slider.min = 1960;
 				slider.max = 2012;
@@ -180,7 +180,7 @@ function ready() { // Load SVG before doing ANYTHING
 		d3.selectAll('.label').on('mouseover', function () {
 			d3.select(this).style('cursor', 'pointer')
 			d3.select('#SVG').select('#' + this.id).style('stroke-width', 0.6);							// Hovering over a state in the compare window
-			document.getElementById(this.id).parentNode.appendChild(document.getElementById(this.id));  // also highlights states on the map
+			document.getElementById(this.id).parentNode.appendChild(document.getElementById(this.id));  // also highlights the state on the map
 			var labels = document.getElementById('labels')
 			labels.parentNode.appendChild(labels);
 		}).on('mouseout', function() {
@@ -248,13 +248,13 @@ function back() {                              // Go back to initial view with j
 	parent.removeChild(canvas);
 }
 
-function getData(d, v) { // Get data for the map
+function getData(data, variable) { // Get data for the map
 	var l = {};
-	for (var x in d[0]) {
+	for (var state in data[0]) {
 		if (v == 'Cook PVI') {
 			var sortable = [];
-			for (var dataPoint in d[0][x][v]) {
-				  sortable.push([dataPoint, d[0][x][v][dataPoint]])
+			for (var dataPoint in data[0][state][variable]) {
+				  sortable.push([dataPoint, data[0][state][variable][dataPoint]])
 			}
 			sortable.sort(function(a, b) {return a[0] - b[0]})        // Sort data if variable is Cook PVI (rest of the variables in naturally sorted)
 			var vals = [];
@@ -262,11 +262,11 @@ function getData(d, v) { // Get data for the map
 				vals.push(sortable[value][1])
 			}
 		}else {
-			var vals = Object.keys(d[0][x][v]).map(function (key) {
-				return d[0][x][v][key];
+			var vals = Object.keys(data[0][state][variable]).map(function (key) {
+				return data[0][state][variable][key];
 			});
 		}
-		l[d[0][x]['Name']]=vals;
+		l[data[0][state]['Name']]=vals;
 	}
 	return l
 }
