@@ -5,7 +5,4 @@ In deze visualisatie kan de gebruiker misdaadcijfers vergelijken met andere gege
 
 ## Screenshots
 
-
-
-Copyright (c) 2016 Jan Jaap Meijerink;
-[License link](https://github.com/MJJMeijerink/Programmeerproject/blob/master/LICENSE "License")
+[Copyright (c) 2016 Jan Jaap Meijerink](https://raw.githubusercontent.com/MJJMeijerink/Programmeerproject/master/LICENSE/ "License")
