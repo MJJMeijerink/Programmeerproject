@@ -57,7 +57,7 @@
 * Cook PVI is een variabele met negatieve nummers en de stappen in de tijd zijn 4 jaar ipv 1 jaar, om deze data goed te visualiseren moet ik veel extra code schrijven speciaal voor deze variabele.
 
 # Day 14
-* Cook PVI wordt nu goed gevisualiseerd, met extra kleur in de grafieken om een duidelijker beeld te scheppen
+* Cook PVI wordt nu goed gevisualiseerd, met extra kleur in de grafieken om een duidelijker beeld te scheppen, IPV gebruik te maken van de update(); functie van Chart.js, die geen rekening houdt met veranderingen in de grafiek layout (zoals de behoefte aan aangepaste Y-as labels).
 
 # Day 15
 * Besloten om Cook PVI apart te visualiseren zodat de grafiek makkelijker gecustomized can worden.
