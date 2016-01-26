@@ -10,3 +10,9 @@ Deze doelen heb ik geprobeerd te bereiken door middel van drie verschillende vis
 ## Ontwerpspecificaties
 Dit is een state diagram dat in het kort de basisfunctionaliteit van mijn visualisatie laat zien.
 ![State diagram](/doc/Diagram.png)
+
+#### Functies
+ * `ready();` --> Deze functie wordt aangeroepen op body.onload en zorgt ervoor dat javascript pas uitgevoerd wordt als de pagina geladen is.
+ * `XMLHttpRequest();` --> Gebruikt om de data te laden.
+ * `dataLoaded();` --> Code in deze functie wordt pas uitgevoerd als de data is geladen. Deze functie staat in de `ready();` functie, de data wordt dus pas geladen als de HTML geladen is.
+ * `selectAll.onclick` --> Deze functie geeft functionaliteit aan de 'select all' checkbox in het 'compare states' venster.
