@@ -61,3 +61,10 @@
 
 # Day 15
 * Besloten om Cook PVI apart te visualiseren zodat de grafiek makkelijker gecustomized can worden.
+
+# Day 16
+* README.md aangepast
+* LICENSE toegevoegd
+* Code opgeruimd/verbeterd en gecomment
+
+# Day 17
