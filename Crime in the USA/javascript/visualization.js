@@ -47,13 +47,9 @@ function ready() { // Load SVG before doing ANYTHING
 		
 		slider = document.getElementById('slider'); // Store slider object in a variable
 		
-		for (var i = 0; i < Object.keys(states).length; i++) { // Add onclick listener to states
+		for (var i = 0; i < Object.keys(states).length; i++) { // Add class to states
 			var state = d3.select('#' + Object.keys(states)[i]);
-			state.on('click', function() {
-				if (this.id != 'DC') { // There is no data for District of Colombia, so ignore this state
-					goTo(variables, this.id, data, slider);
-				}
-			}).attr('class', 'state');
+			state.attr('class', 'state');
 		}	
 		
 		d3.selectAll('.radButton').on('click', function () { // Add onclick listener for radio-buttons
@@ -74,7 +70,7 @@ function ready() { // Load SVG before doing ANYTHING
 				slider.max = 2;
 				slider.step = 1
 			}
-			drawMap(this.id, data, slider, w, h, legend, parent);
+			drawMap(this.id, data, slider, legend, parent);
 			if ($('#graph').is(':visible')) {
 				if (document.getElementById('chart').value != undefined) { // If our canvas has a value we know it is a barchart
 					var selected = [];
@@ -93,7 +89,7 @@ function ready() { // Load SVG before doing ANYTHING
 				}
 			}
 			if (slider.max > 0) { // Make sure slider is usable
-				drawMap(v.id, data, slider, w, h, legend, parent);
+				drawMap(v.id, data, slider, legend, parent);
 				if ($('#graph').is(':visible')) {
 					if (document.getElementById('chart').value != undefined) {
 						update(barChart, slider, data, v.id);
@@ -175,6 +171,10 @@ function ready() { // Load SVG before doing ANYTHING
 							return data[0][states[el.id]][variable.id][slider.value];
 						}
 				})
+			}).on('click', function() {
+				if (this.id != 'DC') { // There is no data for District of Colombia, so ignore this state
+					goTo(variables, this.id, data, slider);
+				}
 			});
 			
 		d3.selectAll('.label').on('mouseover', function () {
@@ -272,7 +272,7 @@ function getData(data, variable) { // Get data for the map
 }
 
 
-function drawMap(v, data, slider, w, h, legend, parent){            // Color the map and draw the legend
+function drawMap(variable, data, slider, legend, parent){            // Color the map and draw the legend
 	if (slider.value > 1950) {
 		document.getElementById('sliderText').innerHTML = 'Year: ' + slider.value;
 	}else {
@@ -281,13 +281,13 @@ function drawMap(v, data, slider, w, h, legend, parent){            // Color the
 		else var inner = 'Year: 2001 - 2010';
 		document.getElementById('sliderText').innerHTML = inner;
 	}
-	var d = getData(data, v);
+	var d = getData(data, variable);
 	var vals = Object.keys(d).map(function (key) {
 		return d[key];
 	});
-	if (v != 'Cook PVI') {
+	if (variable != 'Cook PVI') {
 		var max = d3.max(vals, function(array) {
-			if (v != 'Guns per household') {
+			if (variable != 'Guns per household') {
 				return d3.max([array[slider.value - slider.min]]);
 			}else{
 				if (slider.value == 0) {return d3.max([array[2]]);}
@@ -296,7 +296,7 @@ function drawMap(v, data, slider, w, h, legend, parent){            // Color the
 			}
 		});
 		var min = d3.min(vals, function (array) {										// Min and max values gradient domain
-			if (v != 'Guns per household') {
+			if (variable != 'Guns per household') {
 				return d3.min([array[slider.value - slider.min]]);
 			}else{
 				if (slider.value == 0) {return d3.min([array[2]]);}
@@ -309,16 +309,16 @@ function drawMap(v, data, slider, w, h, legend, parent){            // Color the
 	var stateNames = Object.getOwnPropertyNames(d);
 	for (var i = 0; i < stateNames.length; i++) {
 		var state = d3.select('#' + Object.getOwnPropertyNames(d)[i]);
-		if (v != 'Guns per household' && v != 'Cook PVI') {
+		if (variable != 'Guns per household' && variable != 'Cook PVI') {
 			var value = d[stateNames[i]][slider.value - slider.min]
-		} else if (v == 'Cook PVI') {
+		} else if (variable == 'Cook PVI') {
 			var value = d[stateNames[i]][(slider.value - slider.min) / 4]
 		}else {
 			if (slider.value == 0) {var value = d[stateNames[i]][2];}
 			else if (slider.value == 2) {var value = d[stateNames[i]][0];}
 			else {var value = d[stateNames[i]][1];}
 		}
-		if (v == 'Cook PVI') {
+		if (variable == 'Cook PVI') {
 			state.style('fill', function() {
 				if (value < 0) {
 					return 'blue';
@@ -326,14 +326,14 @@ function drawMap(v, data, slider, w, h, legend, parent){            // Color the
 			});
 		}else state.style('fill', function() {return color(value);});
 	}
-	if (v != 'Cook PVI') {             // Draw legend, but not if variable is Cook PVI
+	if (variable != 'Cook PVI') {   	// Draw legend, but not if variable is Cook PVI
+		var w = 300, h = 60; 
 		parent.selectAll('#legend').remove();
 		parent.append("rect").attr('id', 'legend').attr("width", 400).attr("height", h-50).style("fill", "url(#gradient)").attr("transform", "translate(0,10)");
 		var x = d3.scale.linear().range([0, 400]).domain([min, max]);
 		var xAxis = d3.svg.axis().scale(x).tickSize(1);
 		parent.append("g").attr('id', 'legend').attr("class", "x axis").attr("transform", "translate(0,20)").call(xAxis)
-			.append("text").text(document.getElementById(v).value).attr("y", 30).style("text-anchor","right").attr('font-size', '10px');
-		d3.selectAll('.tick').style('font-size', '10px');
+			.append("text").text(document.getElementById(variable).value).attr("y", 30).style("text-anchor","right");
 	} else {
 		parent.selectAll('#legend').remove();
 	}
