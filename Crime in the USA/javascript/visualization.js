@@ -390,8 +390,21 @@ function makeChart(variable, state, d) { // Generate the line chart
 	}
 	if (variable == 'Cook PVI') {
 		var options = {
-			pointHitDetectionRadius : 0,
-			scaleBeginAtZero: false
+			scaleBeginAtZero: false,
+			scaleLabel: function(valuePayload) {
+				if (valuePayload.value > 0){
+					return "R+" + valuePayload.value;
+				}else if (valuePayload.value == 0){
+					return "Even";
+				}else return "D+" + valuePayload.value.slice(1);
+			}, 															// Custom label and tooltip for Cook PVI
+			tooltipTemplate: function(valuePayload) {
+				if (valuePayload.value > 0){
+					return valuePayload.label + ": R+" + valuePayload.value;
+				}else if (valuePayload.value == 0){
+					return "Even";
+				}else return valuePayload.label + ": D+" + valuePayload.value.toString().slice(1);
+			}
 		}
 	}else var options = {
 		pointHitDetectionRadius : 0,
