@@ -68,3 +68,5 @@
 * Code opgeruimd/verbeterd en gecomment
 
 # Day 17
+* Begonnen aan REPORT.md
+* Technical design ondersteunend diagram gemaakt
