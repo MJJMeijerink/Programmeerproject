@@ -50,3 +50,19 @@ Dit is een state diagram dat in het kort de basisfunctionaliteit van mijn visual
   * `on('click', function() {...});` <br> Als er op een staat geklikt wordt moet de lijngrafiek worden weergegeven, deze functie roept dus `goTo();` aan.
  * `d3.selectAll('.label').on('mouseover', function () {...});` <br> Deze functie is voor het 'compare states' venster, als de muis over een staat in dat venster gepositioneerd is, dan moet die staat op gehighlight worden op de kaart.
  * `d3.select('#submitButton').on('click', function() {...});` <br> Deze functie roept `goTo();` aan als er twee of meer staten geselecteerd zijn en er op de 'compare' knop is gedrukt.
+
+## Moeilijkheden en bijzonderheden
+
+#### De layout
+Een belangrijk onderdeel van de visualisatie is de interface, zoals te zien in mijn design document was mijn oorspronkelijke plan om de grafieken onder de kaart te plaatsen. De gebruiker zou dan naar beneden moeten scrollen om die grafiek te zien. Op aanraden van medestudenten heb ik toen naar een manier gezocht om de grafiek op dezelfde pagina te houden als de kaart. De uitdaging hierbij om ervoor te zorgen dat dit niet ten koste ging van de duidelijkheid van de visualisaties. Uiteindelijk heb ik dit opgelost door de kaart te verkleinen als er een grafiek zichtbaar is. Dat zorgt voor genoeg ruimte voor de grafiek en zo kan de gebruiker dus zowel de grafiek als de kaart zien.
+
+#### De data
+Het twee probleem dat ik tegenkwam was de data zelf. Data was verzameld voor alle staten van Amerika, dat houdt in dat er ook data voor het District of Columbia en Puerto Rico (in het geval van Puerto Rico alleen voor de werkloosheid). Het probleem is dat DC een erg klein en stedelijk district is. Met als gevolg dat het lijkt alsof er veel meer misdaad is in DC dan in andere staten, wat niet het geval hoeft te zijn, aangezien DC niet te vergelijken is met andere staten. Daarnaast komt Puerto Rico niet op mijn kaart voor. Om die redenen heb ik besloten data voor deze twee staten uit mijn visualisatie te laten.
+
+#### De legenda
+Het maken van de legenda was lastig omdat het kleiner maken van de legenda niet mogelijk was (omdat d3 niet altijd percentages accepteert). Om die reden heb ik ervoor gekozen de legende niet even breed te maken als de kaart, in plaats daarvan heeft de legende een vaste pixelbreedte. Gelukkig  maakt dit niet uit bij het verkleinen van het beeld, de legenda is namelijk niet breed genoeg om andere elementen op het beeld in de weg te zitten. Wel kan de legenda er om deze redenen wat klein uitzien op schermen met hogere resoluties.
+
+#### De grafieken
+Mijn oorspronkelijke idee was om de grafieken ook met d3 te maken. Uiteindelijk heb ik dat niet gedaan, omdat het me teveel tijd zou kosten en er teveel mis kon gaan. In plaats daarvan heb ik besloten Chart.js te gebruiken. Een plugin om stijlvolle grafieken mee te maken. Ook hierbij liep ik nog tegen een aantal problemen aan, omdat de Cook PVI variabele in mijn visualisatie een aantal unieke eigenschappen heeft. Labels zijn bijvoorbeeld niet puur numeriek maar bijvoorbeeld: 'D+5'. Hierdoor moest ik veel extra code schrijven om ervoor te zorgen dat Chart.js goede grafieken maakt voor de Cook PVI variabele. 
+
+Wat betreft de keuze voor een lijn- en staafgrafiek voor de visualisatie; de lijngrafiek is gekozen omdat de gebruiker op die manier makkelijk trends in de tijd kan zien en de staafgrafiek is gekozen omdat het verschil tussen twee of meer staten op die manier goed zichtbaar is.
