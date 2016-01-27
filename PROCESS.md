@@ -70,3 +70,9 @@
 # Day 17
 * Begonnen aan REPORT.md
 * Technical design ondersteunend diagram gemaakt
+
+# Day 18
+* Verder gewerkt aan REPORT.md
+* Code verder opgeruimd
+
+# Day 19
