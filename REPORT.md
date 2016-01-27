@@ -35,6 +35,7 @@ Dit is een state diagram dat in het kort de basisfunctionaliteit van mijn visual
  * `update(barChart, slider, d, variable);` <br> Deze functie update de staafgrafiek als het jaartal verandert, dit is sneller dan het opnieuw teken van de grafiek. De parameters:
   * `barChart` <br> De variabele waarin de barChart gegevens worden opgeslagen als deze gemaakt wordt. Dit hebben we nodig om gegevens te kunnen veranderen en om `barChart.update();` te kunnen aanroepen.
   * `slider` <br> De slider variabele om te zien voor welk jaar we data nodig hebben.
+  * `d` <br> De variabele waarin de data is opgeslagen.
   * `variable` <br> De variabele waarvoor de data moet worden opgehaald.
  * `navigateSlider(direction);` <br> Deze functie geeft functionaliteit aan de pijltjesknoppen om de slider mee te besturen. Direction geeft aan welke van de twee knoppen is ingedrukt.
 
