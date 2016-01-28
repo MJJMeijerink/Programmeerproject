@@ -69,3 +69,6 @@ Wat betreft de keuze voor een lijn- en staafgrafiek voor de visualisatie; de lij
 
 #### Het 'compare states' venster
 In het DESIGN.md staat dat het mijn bedoeling was een pop up te maken met het compare states venster als er op een 'compare' knop gedrukt werd. Uiteindelijk heb ik besloten om dit venster direct zichtbaar te maken zodat de gebruiker geen exta handeling hoeft te doen. De tradeoff is dat als er een grafiek verschijnt het venster verdwijnt, toch vereist dit alternatief minder handelingen van de gebruiker dan de pop up.
+
+#### Extra informatie
+In mijn repository staat een map 'javascript' en een map 'scripts'. De 'scripts' map bevat alle python code (onder andere code om HTML checkboxes mee te genereren). En de 'javascript' map bevat alle javascript, waaronder alle plugins (D3.js, Chart.js en JQuery.js), een javascript bestand met een variabele waarin alle namen en afkortingen van de Amerikaanse staten zijn opgeslagen en de javascript die functionaliteit aan mijn visualisatie geeft.
