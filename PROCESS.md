@@ -76,3 +76,4 @@
 * Code verder opgeruimd
 
 # Day 19
+* REPORT.md afgemaakt
